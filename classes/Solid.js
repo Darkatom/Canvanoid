@@ -4,10 +4,14 @@ class Solid {
 		this.y = y;	
 		this.w = w;
 		this.h = h; 
+        this.sprite = null;
     }
 
     draw() {
-	    ctx.strokeRect(this.x, this.y, this.w, this.h);	
+        if (this.sprite == null)
+	        ctx.strokeRect(this.x, this.y, this.w, this.h);	
+        else
+            this.sprite.render(this.x, this.y, this.w, this.h);
     }
 
     update() {

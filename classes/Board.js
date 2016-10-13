@@ -1,23 +1,25 @@
 class Board extends Solid {
 	constructor(bricks) {
-        var selfW = 600;
+        var fakeBrick = new Brick(0,0,0);
+
+        var selfW = fakeBrick.w * 13;
         var selfH = 600;
 		super(canvas.width/2 - selfW/2, 
               canvas.height/2 - selfH/2, 
               selfW, selfH);
 
-        this.bricks = [];
+        this.sprite = new Sprite("./sprites/congruent_outline.png", 300, 300, 0, 0);
 
-        var fakeBrick = new Brick(0,0,0);
+        this.bricks = [];
 
         var initY = this.y + 10;
         var countY = 0;
-        var gap = 5;
         for (var line of bricks) {
-            var initX = this.x + this.w/2 - (line.length*fakeBrick.w)/2 - (line.length*gap)/2; // width of a brick is 40, line.length*40/2
+            var initX = this.x + this.w/2 - (line.length*fakeBrick.w)/2; // width of a brick is 40, line.length*40/2
             var countX = 0;
-            for (var life of line) {
-                this.bricks.push( new Brick(initX + fakeBrick.w*countX + gap*countX, initY + fakeBrick.h*countY + gap*countY, life) );
+            for (var type of line) {
+                this.bricks.push( new Brick(initX + fakeBrick.w*countX, initY + fakeBrick.h*countY, 
+                                  type) );
                 countX++;
             }
             countY++;
@@ -38,6 +40,7 @@ class Board extends Solid {
             br.update();
             if (br.life <= 0) {
                 this.bricks.splice(this.bricks.indexOf(br), 1);
+                score += br.value;
                 br = null;
             } 
         }

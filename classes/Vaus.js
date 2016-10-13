@@ -4,7 +4,8 @@ class Vaus extends Solid {
     constructor() {
         super(board.x + board.w/2 - 50, 
               board.y + board.h - 50, 
-              100, 10);
+              100, 20);
+        this.sprite = new Sprite("./sprites/Vaus.png", this.w, this.h, 0, 0);
 
         this.speed = 500;
         this.vector = { x: 0, y:0 };
