@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ES6 Classes</title>
+	
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+
+	<script src="./canvanoid.js"></script>
+	<script src="./classes/Ball.js"></script>
+	<script src="./classes/Solid.js"></script>
+	<script src="./classes/Board.js"></script>
+	<script src="./classes/Brick.js"></script>
+	<script src="./classes/Vaus.js"></script>
+	<script src="./utils.js"></script>
+	<script src="./tests.js"></script>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script>		
+		const w = window;
+		const requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || 
+								w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+		
+		
+		var then = Date.now();
+    
+		// require();
+		reset();
+		main();
+	</script>
+</body>
+</html>
