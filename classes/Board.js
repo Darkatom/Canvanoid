@@ -24,6 +24,8 @@ class Board extends Solid {
             }
             countY++;
         }
+
+        this.clear = false; // when all bricks, except golden, have been destroyed.
 	}
 
     draw() {
@@ -36,8 +38,10 @@ class Board extends Solid {
         for (var b of balls)
             this.collision(b);
         
+        this.clear = true;
         for (var br of this.bricks) {
             br.update();
+            this.clear = this.clear && br.inmortal; // if only inmortal bricks remain, the stage is cleared.
             if (br.life <= 0) {
                 this.bricks.splice(this.bricks.indexOf(br), 1);
                 score += br.value;

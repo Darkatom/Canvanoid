@@ -1,4 +1,4 @@
-function main() {				
+function main() {	
 	var now = Date.now();
 	var delta = now - then;
 
@@ -7,8 +7,30 @@ function main() {
 
 	then = now;
 
-	requestAnimationFrame(main);
+	
+	if (board.clear) {
+		stageNumber++;
+		reset();
+	} else if (balls.length <= 0) {
+		lives--;
+		score = 0;
+		if (lives <= 0) showMessage( "GAME OVER!" );
+			       else reset();
+	} 
+
+	if (lives > 0)
+		if (stageNumber >= stages.length) showMessage( "OMG YOU WON OMG!" );
+		else requestAnimationFrame(main);
 };
+
+function showMessage( msg ) {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.font = "50px Georgia";
+	ctx.fillText( msg , board.x + board.w/2 - 150, board.y + board.h/2 - 100);
+	ctx.font = "30px Georgia";
+	ctx.fillText("Score: "+ score, board.x + board.w/2 - 70, board.y + board.h/2 - 50);
+	ctx.strokeRect(0, 0, canvas.width, canvas.height);
+}
 
 // -- EXECUTION -- //
 
@@ -39,15 +61,22 @@ function reset() {
 
 	vaus = new Vaus();
 	vaus.start();
-};
+
+	state = "playing";
+}
 
 function update(dt) {		
-	for (var b of balls)
+	for (var b of balls) {
 		b.update(dt);
+		if (b.y >= vaus.y + vaus.h) {
+			balls.splice(balls.indexOf(b), 1);
+			b = null;
+		}
+	}
 
 	board.update(dt);
 	vaus.update(dt);
-};
+}
 
 function draw() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -60,4 +89,10 @@ function draw() {
 	ctx.font = "20px Georgia";
 	ctx.fillText("Score: "+ score, board.x + board.w - 100, board.y + board.h + 30);
 	ctx.strokeRect(0, 0, canvas.width, canvas.height);
-};
+
+	for (var i = 0; i < lives; i++) {
+		lifeSprite.render(board.x + 10 + i*lifeSprite.w + i*5, 
+		                  board.y + board.h + 10 + lifeSprite.h, 
+		                  lifeSprite.w, lifeSprite.h);
+	}
+}
