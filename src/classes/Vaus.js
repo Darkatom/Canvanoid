@@ -1,10 +1,8 @@
 
 class Vaus extends Solid {
 
-    constructor() {
-        super(board.x + board.w/2 - 50, 
-              board.y + board.h - 50, 
-              100, 20);
+    constructor(x, y) {
+        super(x, y, 100, 20);
         this.sprite = new Sprite("./sprites/Vaus.png", this.w, this.h, 0, 0);
 
         this.speed = 500;
@@ -13,25 +11,25 @@ class Vaus extends Solid {
     }
 
     start() {        
-        w.onkeydown = function (e) {
+        window.onkeydown = (e)=>{
             if (e.key == "a" ) { // left key
-                vaus.vector.x = -1;
+                this.vector.x = -1;
             } else if (e.key == "d") { // right key
-                vaus.vector.x = 1;
+                this.vector.x = 1;
             }
 		};     
 
-        w.onkeyup = function (e) {
-                vaus.vector.x = 0;
+        window.onkeyup = (e)=>{
+            this.vector.x = 0;
 		};
     }
 
-    update(dt) {
-        super.update();
-        this.move(dt);
+    update(game) {
+        super.update(game.balls);
+        this.move(game.time.delta, game.board);
     }
 
-  /*  collided( dir, ball ) {
+    /*collided( dir, ball ) {
         if (dir == "top") {
 
 
@@ -51,7 +49,7 @@ class Vaus extends Solid {
 
     }*/
 
-    move(dt) {
+    move(dt, board) {
         this.x += this.vector.x*this.speed*dt;
         this.y += this.vector.y*this.speed*dt;
 

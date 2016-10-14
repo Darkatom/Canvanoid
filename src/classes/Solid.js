@@ -7,14 +7,14 @@ class Solid {
         this.sprite = null;
     }
 
-    draw() {
+    draw(ctx) {
         if (this.sprite == null)
 	        ctx.strokeRect(this.x, this.y, this.w, this.h);	
         else
-            this.sprite.render(this.x, this.y, this.w, this.h);
+            this.sprite.render(ctx, this.x, this.y, this.w, this.h);
     }
 
-    update() {
+    update(balls) {
         for (var b of balls) {  // look for collisions
             var dir = this.collision(b);
             if (dir != null)

@@ -9,7 +9,7 @@ class Sprite {
         this.posY = posY;
     }
 
-    render(x, y, w, h) {
+    render(ctx, x, y, w, h) {
         ctx.drawImage(this.img,
                       this.posX, this.posY,
                       this.w, this.h,

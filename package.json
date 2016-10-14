@@ -1,0 +1,30 @@
+{
+  "name": "canvanoid",
+  "version": "1.0.0",
+  "description": "Cool Canvas Arkanoid",
+  "main": "canvanoid.js",
+  "watch": {
+    "build": "src/**/*.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d dist",
+    "watch": "npm-watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darkatom/Canvanoid.git"
+  },
+  "author": "Darkatom",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Darkatom/Canvanoid/issues"
+  },
+  "homepage": "https://github.com/Darkatom/Canvanoid#readme",
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-latest": "^6.16.0",
+    "npm-watch": "^0.1.6"
+  }
+}

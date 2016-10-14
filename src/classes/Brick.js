@@ -1,7 +1,7 @@
 
 class Brick extends Solid {
 
-    constructor(x, y, type) {
+    constructor(x, y, type, stage) {
         super(x, y, 50, 20);
         this.sprite = new Sprite("./sprites/bricks.png", this.w, this.h, (type-1)*this.w, 0);
 
@@ -14,8 +14,8 @@ class Brick extends Solid {
             this.value = 0;
         
         } else if (type == 9) {
-            this.life = stageNumber + 1;
-            this.value = (stageNumber + 1)*50;
+            this.life = stage + 1;
+            this.value = (stage + 1)*50;
 
         } else if (type == 10) {
             this.inmortal = true;

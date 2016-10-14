@@ -13,14 +13,14 @@ class Ball {
         this.sprite = new Sprite("./sprites/ball.png", this.radius*2,  this.radius*2, 0, 0);
     }
 
-    draw () {
+    draw (ctx) {
         if (this.sprite == null){
             //ctx.strokeRect(b.x - b.radius, b.y - b.radius, b.radius*2, b.radius*2);	
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
             ctx.stroke();
         } else {
-            this.sprite.render(this.x - this.radius, this.y - this.radius, this.radius*2, this.radius*2);
+            this.sprite.render(ctx, this.x - this.radius, this.y - this.radius, this.radius*2, this.radius*2);
         }
     }
 

@@ -1,50 +1,52 @@
 class Board extends Solid {
-	constructor(bricks) {
+	constructor() {
         var fakeBrick = new Brick(0,0,0);
-
         var selfW = fakeBrick.w * 13;
         var selfH = 600;
 		super(canvas.width/2 - selfW/2, 
               canvas.height/2 - selfH/2, 
               selfW, selfH);
 
+        this.stage = -1;
+        this.bricks = null;
+
         this.sprite = new Sprite("./sprites/congruent_outline.png", 300, 300, 0, 0);
-
-        this.bricks = [];
-
-        var initY = this.y + 10;
-        var countY = 0;
-        for (var line of bricks) {
-            var initX = this.x + this.w/2 - (line.length*fakeBrick.w)/2; // width of a brick is 40, line.length*40/2
-            var countX = 0;
-            for (var type of line) {
-                this.bricks.push( new Brick(initX + fakeBrick.w*countX, initY + fakeBrick.h*countY, 
-                                  type) );
-                countX++;
-            }
-            countY++;
-        }
-
         this.clear = false; // when all bricks, except golden, have been destroyed.
 	}
 
-    draw() {
-        super.draw();        
-        for (var br of this.bricks) 
-            br.draw();
+    setStage ( stage ) {
+        if (this.stage != stage) {
+            this.stage = stage;
+            
+            var fakeBrick = new Brick(0,0,0,0);
+            this.bricks = [];
+            
+            var map = stages[this.stage];
+            for (var row = 0; row < map.length; row++) 
+                for (var column = 0; column < map[row].length; column++)
+                    this.bricks.push( new Brick(this.x + fakeBrick.w*column, this.y + fakeBrick.h*row, 
+                                                map[row][column], this.stage) 
+                                    );
+            
+        }
     }
 
-    update() {
-        for (var b of balls)
-            this.collision(b);
+    draw(ctx) {
+        super.draw(ctx);        
+        for (var br of this.bricks) 
+            br.draw(ctx);
+    }
+
+    update( game ) {
+        super.update(game.balls);
         
         this.clear = true;
         for (var br of this.bricks) {
-            br.update();
+            br.update(game.balls);
             this.clear = this.clear && br.inmortal; // if only inmortal bricks remain, the stage is cleared.
             if (br.life <= 0) {
                 this.bricks.splice(this.bricks.indexOf(br), 1);
-                score += br.value;
+                game.state.score += br.value;
                 br = null;
             } 
         }
@@ -76,5 +78,7 @@ class Board extends Solid {
                 ball.setPosition(this.x + ball.radius, ball.y);
             }
         }
+
+        return null;
 	}
 }
