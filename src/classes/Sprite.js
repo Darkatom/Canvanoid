@@ -1,5 +1,4 @@
-
-class Sprite {
+export default class Sprite {
     constructor(src, w, h, posX, posY) {
         this.img = new Image();
         this.img.src = src;

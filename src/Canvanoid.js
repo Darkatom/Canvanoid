@@ -1,5 +1,14 @@
+import stages from './stages.js';
+import Sprite from './classes/Sprite.js';
+import Ball from './classes/Ball.js';
+import Board from './classes/Board.js';
+import Brick from './classes/Brick.js';
+import Vaus from './classes/Vaus.js';
+import State from './classes/State.js';
+import Panel from './classes/Panel.js';
+import Score from './classes/Score.js';
 
-class Canvanoid {
+export default class Canvanoid {
 	constructor(canvas) {
 		this.canvas = canvas;
 		this.ctx = canvas.getContext("2d");
@@ -10,7 +19,7 @@ class Canvanoid {
 	    this.messagePanel = null;
 		this.score = null;
 
-		this.state = null;
+		this.state = null; 
 		this.board = null;
 		this.balls = null;
 		this.vaus = null; 
@@ -141,19 +150,4 @@ class Canvanoid {
 	}
 }
 
-// -- EXECUTION -- //
-
-function require() {
-	var requiring = [ "utils.js", "tests.js", 
-				 	  "./classes/Ball.js", "./classes/Solid.js", "./classes/Brick.js", "./classes/Board.js"
-				    ];
-
-    for (var s of requiring) {
-		console.log(s);
-		var imported = document.createElement('script');
-		imported.type = "text/javascript";
-		imported.src = s;
-		document.head.appendChild(imported);
-	}
-}
-
+module.exports = Canvanoid;

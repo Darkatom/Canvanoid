@@ -1,6 +1,9 @@
+import Solid from "./Solid.js";
+import Board from "./Board.js";
+import Ball from "./Ball.js";
+import Sprite from "./Sprite.js";
 
-class Vaus extends Solid {
-
+export default class Vaus extends Solid {
     constructor(x, y) {
         super(x, y, 100, 20);
         this.sprite = new Sprite("./sprites/Vaus.png", this.w, this.h, 0, 0);
@@ -8,19 +11,34 @@ class Vaus extends Solid {
         this.speed = 500;
         this.vector = { x: 0, y:0 };
 
+        this.usingMouse = false;
+
     }
 
     start() {        
         window.onkeydown = (e)=>{
-            if (e.key == "a" ) { // left key
+            if (e.key == "a" || e.key == "A" || e.keyCode == 37) { // left key
                 this.vector.x = -1;
-            } else if (e.key == "d") { // right key
+            } else if (e.key == "d" || e.key == "D" || e.keyCode == 39) { // right key
                 this.vector.x = 1;
             }
 		};     
 
         window.onkeyup = (e)=>{
             this.vector.x = 0;
+		};
+
+        window.onmousedown = (e)=> {
+            this.usingMouse = true;
+        };
+
+        window.onmousemove = (e)=> {
+            if (this.usingMouse)
+                this.x = e.clientX - this.w/2;
+        };
+        
+        window.onmouseup = (e)=>{
+            this.usingMouse = false;
 		};
     }
 

@@ -1,5 +1,8 @@
+import Solid from "./Solid";
+import Ball from "./Ball.js";
+import Sprite from "./Sprite.js";
 
-class Brick extends Solid {
+export default class Brick extends Solid {
 
     constructor(x, y, type, stage) {
         super(x, y, 50, 20);
@@ -14,7 +17,7 @@ class Brick extends Solid {
             this.value = 0;
         
         } else if (type == 9) {
-            this.life = stage + 1;
+            this.life = stage + 2;
             this.value = (stage + 1)*50;
 
         } else if (type == 10) {

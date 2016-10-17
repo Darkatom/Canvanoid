@@ -1,5 +1,6 @@
+import Sprite from "./Sprite.js";
 
-class Ball {  
+export default class Ball {  
     constructor(x, y) {
         this.x = x;
         this.y = y;

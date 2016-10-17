@@ -1,4 +1,7 @@
-class Solid {
+import Ball from "./Ball.js";
+import Sprite from "./Sprite.js";
+
+export default class Solid {
     constructor(x, y, w, h) {
 		this.x = x;
 		this.y = y;	
