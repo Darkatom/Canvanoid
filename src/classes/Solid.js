@@ -3,18 +3,22 @@ import Sprite from "./Sprite.js";
 
 export default class Solid {
     constructor(x, y, w, h) {
-		this.x = x;
-		this.y = y;	
-		this.w = w;
-		this.h = h; 
+        this.position = {x: x, y: y}; 
+		this.width = w;
+		this.height = h; 
         this.sprite = null;
+    }
+
+    setPosition(x, y) {
+        this.position.x = x;
+        this.position.y = y;
     }
 
     draw(ctx) {
         if (this.sprite == null)
-	        ctx.strokeRect(this.x, this.y, this.w, this.h);	
+	        ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);	
         else
-            this.sprite.render(ctx, this.x, this.y, this.w, this.h);
+            this.sprite.render(ctx, this.position.x, this.position.y, this.width, this.height);
     }
 
     update(balls) {
@@ -28,42 +32,42 @@ export default class Solid {
     collided( dir, ball ) {
         switch(dir) {
             case "bottom":
-                ball.changeDirection("vertical");
-                ball.setPosition(ball.x, this.y + this.h + ball.radius);
+                ball.setDirection(ball.movementVector.x, -ball.movementVector.y);   // change movement vertically
+                ball.setPosition(ball.position.x, this.position.y + this.height + ball.radius);   // put ball bottom from solid
                 break;
 
             case "top":
-                ball.changeDirection("vertical");
-                ball.setPosition(ball.x, this.y - ball.radius);
+                ball.setDirection(ball.movementVector.x, -ball.movementVector.y);   // change movement vertically
+                ball.setPosition(ball.position.x, this.position.y - ball.radius);   // put ball top from solid
                 break;
 
             case "left":
-                ball.changeDirection("horizontal");
-                ball.setPosition(this.x - ball.radius, ball.y);
+                ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
+                ball.setPosition(this.position.x - ball.radius, ball.position.y);   // put ball left from solid
                 break;
 
             case "right":
-                ball.changeDirection("horizontal");
-                ball.setPosition(this.x + this.w + ball.radius, ball.y);  
+                ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
+                ball.setPosition(this.position.x + this.width + ball.radius, ball.position.y);   // put ball right from solid
                 break;
         }
 
     }
 
     collision( ball ) {   
-        if ((ball.x + ball.radius >= this.x && ball.x - ball.radius <= this.x + this.w) && // horizontal collision
-            (ball.y + ball.radius >= this.y && ball.y - ball.radius <= this.y + this.h))   // vertical collision
+        if ((ball.position.x + ball.radius >= this.position.x && ball.position.x - ball.radius <= this.position.x + this.width) && // horizontal collision
+            (ball.position.y + ball.radius >= this.position.y && ball.position.y - ball.radius <= this.position.y + this.height))   // vertical collision
         {
-             if (ball.last.y - ball.radius > this.y + this.h) {  // hit bottom
+             if (ball.lastPosition.y - ball.radius > this.position.y + this.height) {  // hit bottom
                 return "bottom";
 
-            } else if (ball.last.y + ball.radius < this.y) {  // hit top
+            } else if (ball.lastPosition.y + ball.radius < this.position.y) {  // hit top
                 return "top";
 
-            } else if (ball.last.x + ball.radius < this.x) {  // hit left
+            } else if (ball.lastPosition.x + ball.radius < this.position.x) {  // hit left
                 return "left";
 
-            } else if (ball.last.x - ball.radius > this.x + this.w) {  // hit right
+            } else if (ball.lastPosition.x - ball.radius > this.position.x + this.width) {  // hit right
                 return "right";       
             }
 

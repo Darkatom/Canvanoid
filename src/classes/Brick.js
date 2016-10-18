@@ -6,7 +6,7 @@ export default class Brick extends Solid {
 
     constructor(x, y, type, stage) {
         super(x, y, 50, 20);
-        this.sprite = new Sprite("./sprites/bricks.png", this.w, this.h, (type-1)*this.w, 0);
+        this.sprite = new Sprite("./sprites/bricks.png", (type-1)*this.width, 0, this.width, this.height);
 
         this.life = 1;  // number of hits
         this.value = 50 + (type-1)*10;

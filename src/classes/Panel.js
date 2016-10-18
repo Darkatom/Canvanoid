@@ -1,13 +1,17 @@
 export default class Panel {
     constructor(x, y) {
-        this.x = x;
-        this.y = y;
+        this.position = { x: x, y: y }; 
 
         this.msg = "";
         this.size = "50";
         this.font = "Georgia";
 
         this.enabled = false;
+    }
+
+    setPosition(x, y) {
+        this.position.x = x;
+        this.position.y = y;
     }
 
     setEnabled(value) {
@@ -22,8 +26,7 @@ export default class Panel {
         if (!this.enabled) return;
 
 		ctx.font = this.size + "px " + this.font;
-		ctx.fillText(this.msg, this.x, this.y);
-		ctx.strokeRect(0, 0, canvas.width, canvas.height);
+		ctx.fillText(this.msg, this.position.x, this.position.y);
     }
 
 }

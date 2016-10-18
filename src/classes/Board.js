@@ -6,8 +6,8 @@ import Sprite from "./Sprite.js";
 
 export default class Board extends Solid {
 	constructor() {
-        var fakeBrick = new Brick(0,0,0);
-        var selfW = fakeBrick.w * 13;
+        var fakeBrick = new Brick(0,0,0,0);
+        var selfW = fakeBrick.width * 13;
         var selfH = 600;
 		super(canvas.width/2 - selfW/2, 
               canvas.height/2 - selfH/2, 
@@ -16,8 +16,8 @@ export default class Board extends Solid {
         this.stage = -1;
         this.bricks = null;
 
-        this.sprite = new Sprite("./sprites/congruent_outline.png", 300, 300, 0, 0);
-        this.clear = false; // when all bricks, except golden, have been destroyed.
+        this.sprite = new Sprite("./sprites/congruent_outline.png", 0, 0, 300, 300);
+        this.clear = false; // true when all bricks, except inmortal ones, have been destroyed.
 	}
 
     setStage ( stage ) {
@@ -30,7 +30,8 @@ export default class Board extends Solid {
             var map = stages[this.stage];
             for (var row = 0; row < map.length; row++) 
                 for (var column = 0; column < map[row].length; column++)
-                    this.bricks.push( new Brick(this.x + fakeBrick.w*column, this.y + fakeBrick.h*row, 
+                    this.bricks.push( new Brick(this.position.x + fakeBrick.width*column, 
+                                                this.position.y + fakeBrick.height*row, 
                                                 map[row][column], this.stage) 
                                     );
             
@@ -59,29 +60,29 @@ export default class Board extends Solid {
     }
 
 	collision( ball ) {
-        if (ball.vector.y > 0) { // comes from up
-            if (ball.y + ball.radius >= this.y + this.h ) { // south wall
-                ball.changeDirection("vertical");
-                ball.setPosition(ball.x, this.y + this.h - ball.radius);
+        if (ball.movementVector.y > 0) { // comes from up
+            if (ball.position.y + ball.radius >= this.position.y + this.height ) { // south wall
+                ball.setDirection(ball.movementVector.x, -ball.movementVector.y);  // change movement vertically
+                ball.setPosition(ball.position.x, this.position.y + this.height - ball.radius);
             }
             
-        } else if (ball.vector.y < 0) { // comes from down
-            if (ball.y - ball.radius <= this.y) {	// north wall
-                ball.changeDirection("vertical");
-                ball.setPosition(ball.x, this.y + ball.radius);
+        } else if (ball.movementVector.y < 0) { // comes from down
+            if (ball.position.y - ball.radius <= this.position.y) {	// north wall                
+                ball.setDirection(ball.movementVector.x, -ball.movementVector.y);  // change movement vertically   
+                ball.setPosition(ball.position.x, this.position.y + ball.radius);
             }
         }
 
-        if (ball.vector.x > 0) { // comes from left
-            if (ball.x + ball.radius >= this.x + this.w ) { // east wall
-                ball.changeDirection("horizontal");
-                ball.setPosition(this.x + this.w - ball.radius, ball.y);
+        if (ball.movementVector.x > 0) { // comes from left
+            if (ball.position.x + ball.radius >= this.position.x + this.width ) { // east wall                
+                ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
+                ball.setPosition(this.position.x + this.width - ball.radius, ball.position.y);
             }
 
-        } else if (ball.vector.x < 0) { // comes from right
-            if (ball.x - ball.radius <= this.x) { // west wall
-                ball.changeDirection("horizontal");
-                ball.setPosition(this.x + ball.radius, ball.y);
+        } else if (ball.movementVector.x < 0) { // comes from right
+            if (ball.position.x - ball.radius <= this.position.x) { // west wall                
+                ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
+                ball.setPosition(this.position.x + ball.radius, ball.position.y);
             }
         }
 

@@ -3,7 +3,7 @@ import Sprite from './classes/Sprite.js';
 import Ball from './classes/Ball.js';
 import Board from './classes/Board.js';
 import Brick from './classes/Brick.js';
-import Vaus from './classes/Vaus.js';
+import Paddle from './classes/Paddle.js';
 import State from './classes/State.js';
 import Panel from './classes/Panel.js';
 import Score from './classes/Score.js';
@@ -31,25 +31,27 @@ export default class Canvanoid {
 		this.board = new Board();
 		this.board.setStage(this.state.stage);
 
-		this.balls = [ new Ball(this.board.x + this.board.w/2, this.board.y + this.board.h/2 + 100) ];
-		this.vaus = new Vaus(this.board.x + this.board.w/2 - 50, 
-              				 this.board.y + this.board.h - 50);
+		this.balls = [ new Ball(this.board.position.x + this.board.width/2, this.board.position.y + this.board.height/2 + 100) ];
+		this.vaus = new Paddle(this.board.position.x + this.board.width/2 - 50, 
+              				   this.board.position.y + this.board.height - 50);
 		this.vaus.start();
 
-		this.score = new Score(this.board.x + this.board.w - 100, 
-		                       this.board.y + this.board.h + 30);
+		this.score = new Score(this.board.position.x + this.board.width - 100, 
+		                       this.board.position.y + this.board.height + 30);
 		
-		this.messagePanel = new Panel( this.board.x + this.board.w/2 - 150, 
-							           this.board.y + this.board.h/2 - 100);
+		this.messagePanel = new Panel(this.board.position.x + this.board.width/2 - 150, 
+							          this.board.position.y + this.board.height/2 - 100);
 
 		this.time.then = Date.now();
 		this.loop();
 	}
 
 	reset() {
-		this.balls = [ new Ball(this.board.x + this.board.w/2, this.board.y + this.board.h/2 + 100) ];
-		this.vaus.x = this.board.x + this.board.w/2 - 50; 
-        this.vaus.y = this.board.y + this.board.h - 50;
+		this.balls = [ new Ball(this.board.position.x + this.board.width/2, 
+							    this.board.position.y + this.board.height/2 + 100) 
+					 ];
+		this.vaus.setPosition(this.board.position.x + this.board.width/2 - 50,
+							  this.board.position.y + this.board.height - 50);
 	}
 
 	loop() {	
@@ -69,7 +71,7 @@ export default class Canvanoid {
 
 		for (var b of this.balls) {
 			b.update(dt);
-			if (b.y >= this.vaus.y + this.vaus.h) {
+			if (b.position.y >= this.vaus.position.y + this.vaus.height) {
 				this.balls.splice(this.balls.indexOf(b), 1);
 				b = null;
 			}
@@ -121,16 +123,16 @@ export default class Canvanoid {
 	drawLives() {
 		for (var i = 0; i < this.state.lives; i++) {
 			this.vaus.sprite.render(this.ctx,
-									this.board.x + 10 + i*this.vaus.sprite.w/3 + i*5, 
-									this.board.y + this.board.h + 10 + this.vaus.sprite.h/2, 
-									this.vaus.sprite.w/3, this.vaus.sprite.h/2);
+									this.board.position.x + 10 + i*this.vaus.width/3 + i*5, 
+									this.board.position.y + this.board.height + 10 + this.vaus.height/2, 
+									this.vaus.width/3, this.vaus.height/2);
 		}
 	}
 
 	showMessage(msg) {
-		this.score.x = this.board.x + this.board.w/2 - 70;
-		this.score.y = this.board.y + this.board.h/2 - 50;
-		this.size = "30";
+		this.score.setPosition(this.board.position.x + this.board.width/2 - 70,
+							   this.board.position.y + this.board.height/2 - 50);
+		this.score.size = "30";
 		this.score.draw(this.ctx);
 		this.messagePanel.setMessage(msg);
 		this.messagePanel.setEnabled(true);
@@ -144,8 +146,8 @@ export default class Canvanoid {
 			this.showMessage(this.state.msg);
 		} else { 
 			this.messagePanel.setEnabled(false);
-			this.score.x = this.board.x + this.board.w - 100; 
-			this.score.y = this.board.y + this.board.h + 30;
+			this.score.setPosition(this.board.position.x + this.board.width - 100,
+								   this.board.position.y + this.board.height + 30);
 		}
 	}
 }

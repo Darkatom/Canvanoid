@@ -3,42 +3,48 @@ import Board from "./Board.js";
 import Ball from "./Ball.js";
 import Sprite from "./Sprite.js";
 
-export default class Vaus extends Solid {
+export default class Paddle extends Solid {
     constructor(x, y) {
         super(x, y, 100, 20);
-        this.sprite = new Sprite("./sprites/Vaus.png", this.w, this.h, 0, 0);
+        this.sprite = new Sprite("./sprites/Vaus.png", 0, 0, this.width, this.height);
 
         this.speed = 500;
-        this.vector = { x: 0, y:0 };
+        this.movementVector = { x: 0, y:0 };
 
-        this.usingMouse = false;
-
+        this.click = false;
     }
 
-    start() {        
+    setDirection(x, y) {
+        this.movementVector.x = x;
+        this.movementVector.y = y;
+    }
+
+    start() {    
+        // Keyboard Input    
         window.onkeydown = (e)=>{
             if (e.key == "a" || e.key == "A" || e.keyCode == 37) { // left key
-                this.vector.x = -1;
+                this.setDirection(-1, 0);
             } else if (e.key == "d" || e.key == "D" || e.keyCode == 39) { // right key
-                this.vector.x = 1;
+                this.setDirection(1, 0);
             }
 		};     
 
         window.onkeyup = (e)=>{
-            this.vector.x = 0;
+            this.setDirection(0, 0);
 		};
 
         window.onmousedown = (e)=> {
-            this.usingMouse = true;
+            this.click = true;
         };
 
+        // Mouse Input
         window.onmousemove = (e)=> {
-            if (this.usingMouse)
-                this.x = e.clientX - this.w/2;
+            if (this.click)
+                this.position.x = e.clientX - this.width/2;
         };
         
         window.onmouseup = (e)=>{
-            this.usingMouse = false;
+            this.click = false;
 		};
     }
 
@@ -47,11 +53,8 @@ export default class Vaus extends Solid {
         this.move(game.time.delta, game.board);
     }
 
-    /*collided( dir, ball ) {
+    /* collided( dir, ball ) { - WIP
         if (dir == "top") {
-
-
-
                 ball.changeDirection("vertical");
                 ball.setPosition(ball.x, this.y - ball.radius);
 
@@ -68,13 +71,16 @@ export default class Vaus extends Solid {
     }*/
 
     move(dt, board) {
-        this.x += this.vector.x*this.speed*dt;
-        this.y += this.vector.y*this.speed*dt;
+        var x = this.position.x + this.movementVector.x*this.speed*dt;
+        var y = this.position.y + this.movementVector.y*this.speed*dt;
 
-        if (this.x + this.w >= board.x + board.w)
-            this.x = board.x + board.w - this.w;
-        else if (this.x <= board.x)
-            this.x = board.x;
+        if (x + this.width >= board.position.x + board.width)
+            x = board.position.x + board.width - this.width;
+        
+        else if (x <= board.position.x)
+            x = board.position.x;
+
+        this.setPosition(x, y);
     }
 
 
