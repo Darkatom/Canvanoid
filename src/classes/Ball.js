@@ -9,7 +9,7 @@ export default class Ball {
         this.movementVector = { x: Math.random(1, 3) - 2, 
                                 y: Math.random(1, 3) - 2 };
                         
-        this.sprite = new Sprite("./sprites/ball.png", 0, 0, 16, 16);
+       // this.sprite = new Sprite("./sprites/ball.png", 0, 0, 16, 16);
     }
 
     setPosition(x, y) {
