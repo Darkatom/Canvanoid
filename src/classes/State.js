@@ -1,8 +1,8 @@
 export default class State {
 
     constructor() {
-		this.stage = 0;      
-		this.lives = 3;
+        this.stage = 0;      
+        this.lives = 3;
         this.score = 0;
         this.msg = null;
     }

@@ -53,23 +53,6 @@ export default class Paddle extends Solid {
         this.move(game.time.delta, game.board);
     }
 
-    /* collided( dir, ball ) { - WIP
-        if (dir == "top") {
-                ball.changeDirection("vertical");
-                ball.setPosition(ball.x, this.y - ball.radius);
-
-        } else if (dir == "left") {
-                ball.setDirection(-ball.vector.x, -1);
-                ball.setPosition(this.x - ball.radius, ball.y);
-
-        } else if ( dir == "right") {
-                ball.changeDirection("horizontal");
-                ball.setDirection(-ball.vector.x, -1);
-                ball.setPosition(this.x + this.w + ball.radius, ball.y);  
-        }
-
-    }*/
-
     move(dt, board) {
         var x = this.position.x + this.movementVector.x*this.speed*dt;
         var y = this.position.y + this.movementVector.y*this.speed*dt;

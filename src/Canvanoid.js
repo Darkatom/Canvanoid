@@ -102,7 +102,6 @@ export default class Canvanoid {
 
 	draw() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		
 		if (this.state.msg == null) {
 			this.board.draw(this.ctx);
 
