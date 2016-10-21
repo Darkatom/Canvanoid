@@ -1,4 +1,4 @@
-import Sprite from "./../interfaceSprite.js";
+import Sprite from "./../interface/Sprite.js";
 
 export default class Ball {  
     constructor(x, y) {
