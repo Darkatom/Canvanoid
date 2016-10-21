@@ -95,47 +95,56 @@ export default class Solid {
 				ball.setPosition(ball.position.x, this.position.y + this.height + ball.radius);   // put ball bottom from solid
 				break;
 
-			case "left":			
-				var dirX = 0;
-				var dirY = 0;
-				var angle = 0;
-				if (ball.position.y + ball.radius <= this.position.y + ball.radius ) { // Upper edge of the solid?
-					angle = 205; // degrees
+			case "left":	
+				if 	(ball.position.y + ball.radius > this.position.y + ball.radius && 
+					 ball.position.y - ball.radius < this.position.y + this.height - ball.radius ) {
+					ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
 
-				} else if (ball.position.y - ball.radius >= this.position.y + this.height - ball.radius ) { // Lower edge of the solid?
-					angle = 155;  // degrees			
+				} else {
+					var dirX = 0;
+					var dirY = 0;
+					var angle = 0;
+					if (ball.position.y + ball.radius <= this.position.y + ball.radius ) { // Upper edge of the solid?
+						angle = 205; // degrees
+
+					} else if (ball.position.y - ball.radius >= this.position.y + this.height - ball.radius ) { // Lower edge of the solid?
+						angle = 155;  // degrees			
+						
+					} 
 					
-				} else { // The ball hit a side 
-					angle = 90;
+					angle = angle*Math.PI/180; // radians
+					dirX = Math.cos(angle);	
+					dirY = Math.sin(angle);
+					ball.setDirection(dirX, dirY);			
 				}
-				
-				angle = angle*Math.PI/180; // radians
-				dirX = Math.cos(angle);	
-				dirY = Math.sin(angle);
-				ball.setDirection(dirX, dirY);			
 
 				ball.setPosition(this.position.x - ball.radius, ball.position.y);   // put ball left from solid
 				break;
 
-			case "right":			
-				var dirX = 0;
-				var dirY = 0;
-				var angle = 0;
-				if (ball.position.y + ball.radius <= this.position.y + ball.radius ) { // Upper edge of the solid?
-					angle = -25; // degrees
+			case "right":	
+				if (ball.position.y + ball.radius > this.position.y + ball.radius && 
+					ball.position.y - ball.radius < this.position.y + this.height - ball.radius ) {
+					ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
 
-				} else if (ball.position.y - ball.radius >= this.position.y + this.height - ball.radius ) { // Lower edge of the solid?
-					angle = 25;  // degrees			
+				} else {		
+					var dirX = 0;
+					var dirY = 0;
+					var angle = 0;
+					if (ball.position.y + ball.radius <= this.position.y + ball.radius ) { // Upper edge of the solid?
+						angle = -25; // degrees
+
+					} else if (ball.position.y - ball.radius >= this.position.y + this.height - ball.radius ) { // Lower edge of the solid?
+						angle = 25;  // degrees			
+						
+					} else { // The ball hit a side 
+						angle = 180;
+					}
 					
-				} else { // The ball hit a side 
-					angle = 180;
+					angle = angle*Math.PI/180; // radians
+					dirX = Math.cos(angle);	
+					dirY = Math.sin(angle);
+					ball.setDirection(dirX, dirY);			
 				}
-				
-				angle = angle*Math.PI/180; // radians
-				dirX = Math.cos(angle);	
-				dirY = Math.sin(angle);
-				ball.setDirection(dirX, dirY);			
-
 				ball.setPosition(this.position.x + this.width + ball.radius, ball.position.y);   // put ball right from solid
 				break;
 		}
