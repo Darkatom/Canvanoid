@@ -136,8 +136,6 @@ export default class Solid {
 					} else if (ball.position.y - ball.radius >= this.position.y + this.height - ball.radius ) { // Lower edge of the solid?
 						angle = 25;  // degrees			
 						
-					} else { // The ball hit a side 
-						angle = 180;
 					}
 					
 					angle = angle*Math.PI/180; // radians
