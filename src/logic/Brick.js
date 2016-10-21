@@ -1,11 +1,11 @@
 import Solid from "./Solid";
 import Ball from "./Ball.js";
-import Sprite from "./Sprite.js";
+import Sprite from "./../interface/Sprite.js";
 
 export default class Brick extends Solid {
 
-    constructor(x, y, type, stage) {
-        super(x, y, 50, 20);
+    constructor(x, y, w, h, type, stage) {
+        super(x, y, w, h);
         this.sprite = new Sprite("./sprites/bricks.png", (type-1)*this.width, 0, this.width, this.height);
 
         this.life = 1;  // number of hits

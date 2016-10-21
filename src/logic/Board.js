@@ -1,17 +1,12 @@
-import stages from './../stages.js';
+import stages from './../assets/stages.js';
 import Solid from "./Solid.js";
 import Brick from "./Brick.js";
 import Ball from "./Ball.js";
-import Sprite from "./Sprite.js";
+import Sprite from "./../interface/Sprite.js";
 
 export default class Board extends Solid {
 	constructor() {
-        var fakeBrick = new Brick(0,0,0,0);
-        var selfW = fakeBrick.width * 13;
-        var selfH = 600;
-		super(canvas.width/2 - selfW/2, 
-              canvas.height/2 - selfH/2, 
-              selfW, selfH);
+		super(0, 0, 650, 600);
 
         this.stage = -1;
         this.bricks = null;
@@ -24,14 +19,16 @@ export default class Board extends Solid {
         if (this.stage != stage) {
             this.stage = stage;
             
-            var fakeBrick = new Brick(0,0,0,0);
+            var brickWidth = 50;
+            var brikHeight = 20;
             this.bricks = [];
             
             var map = stages[this.stage];
             for (var row = 0; row < map.length; row++) 
                 for (var column = 0; column < map[row].length; column++)
-                    this.bricks.push( new Brick(this.position.x + fakeBrick.width*column, 
-                                                this.position.y + fakeBrick.height*row, 
+                    this.bricks.push( new Brick(this.position.x + brickWidth*column, 
+                                                this.position.y + brikHeight*row, 
+                                                brickWidth, brikHeight,
                                                 map[row][column], this.stage) 
                                     );
             

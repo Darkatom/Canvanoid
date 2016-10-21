@@ -1,12 +1,12 @@
-import stages from './stages.js';
-import Sprite from './classes/Sprite.js';
-import Ball from './classes/Ball.js';
-import Board from './classes/Board.js';
-import Brick from './classes/Brick.js';
-import Paddle from './classes/Paddle.js';
-import State from './classes/State.js';
-import Panel from './classes/Panel.js';
-import Score from './classes/Score.js';
+import Ball from './logic/Ball.js';
+import Board from './logic/Board.js';
+import Brick from './logic/Brick.js';
+import Paddle from './logic/Paddle.js';
+import State from './logic/State.js';
+import Sprite from './interface/Sprite.js';
+import Panel from './interface/Panel.js';
+import Score from './interface/Score.js';
+import stages from './assets/stages.js';
 
 export default class Canvanoid {
 	constructor(canvas) {
@@ -17,41 +17,93 @@ export default class Canvanoid {
 					  delta: null }
 
 	    this.messagePanel = null;
-		this.score = null;
+		this.instructionsPanel = null;
+		this.scorePanel = null;
 
 		this.state = null; 
 		this.board = null;
 		this.balls = null;
 		this.vaus = null; 
+		this.pause = null;
 	}
 	
 	start() {	
+		// Game Elements
 		this.state = new State();
-		
 		this.board = new Board();
 		this.board.setStage(this.state.stage);
 
 		this.balls = [ new Ball(this.board.position.x + this.board.width/2, this.board.position.y + this.board.height/2 + 100) ];
 		this.vaus = new Paddle(this.board.position.x + this.board.width/2 - 50, 
               				   this.board.position.y + this.board.height - 50);
-		this.vaus.start();
+		this.interruptions();
 
-		this.score = new Score(this.board.position.x + this.board.width - 100, 
-		                       this.board.position.y + this.board.height + 30);
+		// Interface Elements
+		this.messagePanel = new Panel(this.board.position.x + this.board.width/2, 
+							          this.board.position.y + this.board.height/2,
+							   		  this.ctx);
 		
-		this.messagePanel = new Panel(this.board.position.x + this.board.width/2 - 150, 
-							          this.board.position.y + this.board.height/2 - 100);
+		this.instructionsPanel = new Panel(this.messagePanel.initialPosition.x, this.messagePanel.initialPosition.y + 50,
+							         	   this.ctx);
+		this.instructionsPanel.setSize("18");
+
+		this.scorePanel = new Score(this.board.position.x + this.board.width - 100, 
+		                       	    this.board.position.y + this.board.height + 30,
+							        this.ctx);
+		this.scorePanel.setAlign("left");
+	
+		// Game Starting State
+		this.pause = true;
+		this.state.initGame();
+		this.applyState();
 
 		this.time.then = Date.now();
 		this.loop();
 	}
-
+ 
 	reset() {
 		this.balls = [ new Ball(this.board.position.x + this.board.width/2, 
 							    this.board.position.y + this.board.height/2 + 100) 
 					 ];
 		this.vaus.setPosition(this.board.position.x + this.board.width/2 - 50,
 							  this.board.position.y + this.board.height - 50);
+	}
+
+	interruptions() {
+		window.onkeydown = (e)=>{
+			if (e.keyCode == 32){
+				if (this.state.lives <= 0 || this.state.stage >= stages.length)
+					this.start();
+				else {
+					this.pause = !this.pause;
+					this.state.pauseGame(this.pause);
+					this.applyState();
+				}
+
+			} else if (e.key == "a" || e.key == "A" || e.keyCode == 37) { // left key
+                this.vaus.setDirection(-1, 0);
+            } else if (e.key == "d" || e.key == "D" || e.keyCode == 39) { // right key
+                this.vaus.setDirection(1, 0);
+            }
+		};     
+
+        window.onkeyup = (e)=>{
+            this.vaus.setDirection(0, 0);
+		};
+
+        window.onmousedown = (e)=> {
+            this.vaus.click = true;
+        };
+
+        // Mouse Input
+        window.onmousemove = (e)=> {
+            if (this.vaus.click)
+                this.vaus.setPosition(e.offsetX - this.vaus.width/2, this.vaus.position.y);
+        };
+        
+        window.onmouseup = (e)=>{
+            this.vaus.click = false;
+		};
 	}
 
 	loop() {	
@@ -67,7 +119,9 @@ export default class Canvanoid {
 	}
 
 	update(dt) {
-		if (this.state.lives <= 0)	return;
+		if (this.state.lives <= 0) return;
+		
+		if (this.pause) return;
 
 		for (var b of this.balls) {
 			b.update(dt);
@@ -102,7 +156,7 @@ export default class Canvanoid {
 
 	draw() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		if (this.state.msg == null) {
+		if (this.state.msg == null && this.state.instr == null) {
 			this.board.draw(this.ctx);
 
 			for (var b of this.balls) 
@@ -112,11 +166,12 @@ export default class Canvanoid {
 
 			this.drawLives();
 		} else {
-			this.messagePanel.draw(this.ctx);
+			if (this.state.msg != null) this.messagePanel.draw(this.ctx);
+			if (this.state.instr != null) this.instructionsPanel.draw(this.ctx);
+			this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
 		}
 		
-		this.score.draw(this.ctx);
-		this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
+		this.scorePanel.draw(this.ctx);
 	}
 
 	drawLives() {
@@ -128,25 +183,36 @@ export default class Canvanoid {
 		}
 	}
 
-	showMessage(msg) {
-		this.score.setPosition(this.board.position.x + this.board.width/2 - 70,
-							   this.board.position.y + this.board.height/2 - 50);
-		this.score.size = "30";
-		this.score.draw(this.ctx);
+	showMessage(msg, instr) {
+		this.scorePanel.setPosition(this.instructionsPanel.initialPosition.x, this.instructionsPanel.initialPosition.y + 50);
+		this.scorePanel.setSize("30");
+		this.scorePanel.setAlign("center");
+		this.scorePanel.draw(this.ctx);
+		this.scorePanel.setEnabled(!this.pause);
+
 		this.messagePanel.setMessage(msg);
 		this.messagePanel.setEnabled(true);
+
+		this.instructionsPanel.setMessage(instr);
+		this.instructionsPanel.setEnabled(true);
 	}
 
 	applyState() {
 		this.board.setStage(this.state.stage);
-		this.score.value = this.state.score;
+		this.scorePanel.value = this.state.score;
 
 		if (this.state.msg != null) {
-			this.showMessage(this.state.msg);
+			this.showMessage(this.state.msg, this.state.instr);
+
 		} else { 
+			this.scorePanel.setPosition(this.board.position.x + this.board.width - 100,
+								   	    this.board.position.y + this.board.height + 30);
+			this.scorePanel.setAlign("left");
+			this.scorePanel.setSize("20");
+			this.scorePanel.setEnabled(true);
+
 			this.messagePanel.setEnabled(false);
-			this.score.setPosition(this.board.position.x + this.board.width - 100,
-								   this.board.position.y + this.board.height + 30);
+			this.instructionsPanel.setEnabled(false);
 		}
 	}
 }
