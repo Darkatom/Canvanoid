@@ -2,7 +2,7 @@ import stages from './../stages.js';
 import Solid from "./Solid.js";
 import Brick from "./Brick.js";
 import Ball from "./Ball.js";
-import Sprite from "./Sprite.js";
+import Sprite from "./../interface/Sprite.js";
 
 export default class Board extends Solid {
 	constructor() {

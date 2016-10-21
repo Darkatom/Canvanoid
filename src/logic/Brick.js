@@ -1,6 +1,6 @@
 import Solid from "./Solid";
 import Ball from "./Ball.js";
-import Sprite from "./Sprite.js";
+import Sprite from "./../interface/Sprite.js";
 
 export default class Brick extends Solid {
 

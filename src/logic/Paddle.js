@@ -1,7 +1,7 @@
 import Solid from "./Solid.js";
 import Board from "./Board.js";
 import Ball from "./Ball.js";
-import Sprite from "./Sprite.js";
+import Sprite from "./../interface/Sprite.js";
 
 export default class Paddle extends Solid {
     constructor(x, y) {

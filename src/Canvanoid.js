@@ -1,12 +1,12 @@
-import stages from './stages.js';
-import Sprite from './classes/Sprite.js';
-import Ball from './classes/Ball.js';
-import Board from './classes/Board.js';
-import Brick from './classes/Brick.js';
-import Paddle from './classes/Paddle.js';
-import State from './classes/State.js';
-import Panel from './classes/Panel.js';
-import Score from './classes/Score.js';
+import stages from './assets/stages.js';
+import Ball from './logic/Ball.js';
+import Board from './logic/Board.js';
+import Brick from './logic/Brick.js';
+import Paddle from './logic/Paddle.js';
+import State from './logic/State.js';
+import Sprite from './interface/Sprite.js';
+import Panel from './interface/Panel.js';
+import Score from './interface/Score.js';
 
 export default class Canvanoid {
 	constructor(canvas) {
