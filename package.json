@@ -7,7 +7,7 @@
     "build": "src/**/*.js"
   },
   "scripts": {
-    "test": "mocha ./src/specs",
+    "test": "mocha ./src/specs/dist",
     "build": "webpack",
     "watch": "npm-watch"
   },

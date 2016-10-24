@@ -10,8 +10,8 @@ import stages from './assets/stages.js';
 
 export default class Canvanoid {
 	constructor(canvas) {
-		this.canvas = canvas;
-		this.ctx = canvas.getContext("2d");
+		//this.canvas = canvas;
+		//this.ctx = canvas.getContext("2d");
 		this.time = { now: null,
 					  then: null,
 					  delta: null }
@@ -123,6 +123,15 @@ export default class Canvanoid {
 		
 		if (this.pause) return;
 
+		this.updateBalls(dt);
+		this.board.update(this);
+		this.vaus.update(this);	
+
+		this.updateState();
+		this.applyState();
+	}
+
+	updateBalls(dt) {
 		for (var b of this.balls) {
 			b.update(dt);
 			if (b.position.y >= this.vaus.position.y + this.vaus.height) {
@@ -130,10 +139,9 @@ export default class Canvanoid {
 				b = null;
 			}
 		}
+	}
 
-		this.board.update(this);
-		this.vaus.update(this);
-
+	updateState() {		
 		if (this.board.clear) {
 			this.reset();
 			this.state.nextStage();
@@ -144,14 +152,11 @@ export default class Canvanoid {
 		} 
 
 		if (this.state.lives > 0) {
-			if (this.state.stage >= stages.length) {
+			if (this.state.stage >= stages.length)
 				this.state.wonGame();
-			}
 		} else {
 			this.state.endGame();
 		}
-		
-		this.applyState();
 	}
 
 	draw() {

@@ -58,31 +58,50 @@ export default class Board extends Solid {
 
 	collision( ball ) {
         if (ball.movementVector.y > 0) { // comes from up
-            if (ball.position.y + ball.radius >= this.position.y + this.height ) { // south wall
-                ball.setDirection(ball.movementVector.x, -ball.movementVector.y);  // change movement vertically
-                ball.setPosition(ball.position.x, this.position.y + this.height - ball.radius);
-            }
-            
+            if (ball.position.y + ball.radius >= this.position.y + this.height ) // south wall
+                return "bottom";
+                        
         } else if (ball.movementVector.y < 0) { // comes from down
-            if (ball.position.y - ball.radius <= this.position.y) {	// north wall                
-                ball.setDirection(ball.movementVector.x, -ball.movementVector.y);  // change movement vertically   
-                ball.setPosition(ball.position.x, this.position.y + ball.radius);
-            }
+            if (ball.position.y - ball.radius <= this.position.y) // north wall    
+                return "top";          
         }
 
         if (ball.movementVector.x > 0) { // comes from left
-            if (ball.position.x + ball.radius >= this.position.x + this.width ) { // east wall                
-                ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
-                ball.setPosition(this.position.x + this.width - ball.radius, ball.position.y);
-            }
-
+            if (ball.position.x + ball.radius >= this.position.x + this.width ) // east wall    
+                return "right";   
+            
         } else if (ball.movementVector.x < 0) { // comes from right
-            if (ball.position.x - ball.radius <= this.position.x) { // west wall                
-                ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
-                ball.setPosition(this.position.x + ball.radius, ball.position.y);
-            }
+            if (ball.position.x - ball.radius <= this.position.x) // west wall  
+                return "left";           
         }
 
         return null;
+	}
+
+	collided( dir, ball ) {
+		// Management of the ball after collision
+		
+		switch(dir) {
+			case "top":  
+                ball.setDirection(ball.movementVector.x, -ball.movementVector.y);  // change movement vertically   
+                ball.setPosition(ball.position.x, this.position.y + ball.radius);
+				break;
+
+			case "bottom":
+                ball.setDirection(ball.movementVector.x, -ball.movementVector.y);  // change movement vertically
+                ball.setPosition(ball.position.x, this.position.y + this.height - ball.radius);
+				break;
+
+			case "left":	
+                ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
+                ball.setPosition(this.position.x + this.width - ball.radius, ball.position.y);
+				break;
+
+			case "right":	
+                ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
+                ball.setPosition(this.position.x + ball.radius, ball.position.y);
+				break;
+		}
+
 	}
 }

@@ -1,7 +1,12 @@
 module.exports = {
-    entry: './src/solid.spec.js',
+    entry: {
+        canvanoid: './src/canvanoid.spec.js',
+        solid: './src/solid.spec.js',
+        board: './src/board.spec.js'
+    },
     output: {
-        filename: 'solid.specpack.js'
+        path: './dist/',
+        filename: '[name].specpack.js'
     },
     module: {
         loaders: [{
