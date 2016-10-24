@@ -1,11 +1,11 @@
-import Solid from "./../../classes/Solid.js";
-import Ball from "./../../classes/Ball.js";
+import Solid from "./../../logic/Solid.js";
+import Ball from "./../../logic/Ball.js";
 
 var assert = require('assert');
 
-console.log("- Testing Solid -");
+console.log("- Testing Solid Functions -");
 describe('Solid', function() {
-  describe('#collision(ball)', function() {
+  describe('#-> Collision detection.', function() {
     var solid = new Solid(100, 100, 20, 20);
     var ball = new Ball(0, 0);
 
@@ -43,32 +43,32 @@ describe('Solid', function() {
     });
   });
 
-  describe('#collided(), checked with #collision(ball)', function() {
+  describe('#-> Collision handling.', function() {
     var solid = new Solid(100, 100, 20, 20);
     var ball = new Ball(0, 0);
 
-    it("Ball is repositioned at solid's top, and collides", function() {
+    it("Ball is repositioned at solid's top, demonstrated because it collides", function() {
       ball.setPosition(solid.position.x + solid.width/2, solid.position.y);
       ball.setLastPosition(ball.position.x, ball.position.y - solid.height/2);
       solid.collided("top", ball);
       assert.equal("top", solid.collision(ball));
     });
     
-    it("Ball is repositioned at solid's bottom, and collides", function() {
+    it("Ball is repositioned at solid's bottom, demonstrated because it collides", function() {
       ball.setPosition(solid.position.x + solid.width/2, solid.position.y + solid.height);
       ball.setLastPosition(ball.position.x, ball.position.y + solid.height/2);
       solid.collided("bottom", ball);
       assert.equal("bottom", solid.collision(ball));
     });
     
-    it("Ball is repositioned at solid's left, and collides", function() {
+    it("Ball is repositioned at solid's left, demonstrated because it collides", function() {
       ball.setPosition(solid.position.x, solid.position.y + solid.height/2);
       ball.setLastPosition(ball.position.x - solid.width/2, ball.position.y);
       solid.collided("left", ball);
       assert.equal("left", solid.collision(ball));
     });
     
-    it("Ball is repositioned at solid's right, and collides", function() {
+    it("Ball is repositioned at solid's right, demonstrated because it collides", function() {
       ball.setPosition(solid.position.x + solid.width, solid.position.y + solid.height/2);
       ball.setLastPosition(ball.position.x + solid.width/2, ball.position.y);
       solid.collided("right", ball);

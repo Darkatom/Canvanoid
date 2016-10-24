@@ -2,8 +2,8 @@ import Panel from './Panel.js';
 
 export default class Score extends Panel {
 
-    constructor(x, y) {
-        super(x, y);
+    constructor(x, y, ctx) {
+        super(x, y, ctx);
         this.size = "20";
         this.font = "Georgia";
         this.enabled = true;

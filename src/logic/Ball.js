@@ -1,4 +1,4 @@
-import Sprite from "./Sprite.js";
+import Sprite from "./../interface/Sprite.js";
 
 export default class Ball {  
     constructor(x, y) {
@@ -6,10 +6,9 @@ export default class Ball {
         this.lastPosition = { x: x, y: y }; 
         this.radius = 8;
         this.speed = 200;
-        this.movementVector = { x: Math.random(1, 3) - 2, 
-                                y: Math.random(1, 3) - 2 };
+        this.movementVector = { x: 0, y: -1 };
                         
-       // this.sprite = new Sprite("./sprites/ball.png", 0, 0, 16, 16);
+        this.sprite = new Sprite("./sprites/ball.png", 0, 0, 16, 16);
     }
 
     setPosition(x, y) {
