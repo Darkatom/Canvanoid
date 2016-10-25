@@ -2,9 +2,9 @@
 It's a ES5 clone of Arkanoid, drawn on a canvas element (hence the name). It has been programmed with ES6, then transpiled with Babel.
 ## Playing!
 Controlling the Vaus (the paddle):
-- A/D keys, arrow keys: moving the Vaus to the left or to the right.
-- Mouse: Click and drag on the canvas to move the Vaus around. The Vaus will always follow the mouse while you are clicking.
-- Space bar: Start and pause the game.
+- **A/D keys, arrow keys**: moving the Vaus to the left or to the right.
+- **Mouse**: Click and drag on the canvas to move the Vaus around. The Vaus will always follow the mouse while you are clicking.
+- **Space bar**: Start and pause the game.
 
 ## Launching it
 You need to build it first. Then, just execute *index.html*.
