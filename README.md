@@ -11,7 +11,7 @@ You need to build it first. Then, just execute *index.html*.
 You can also try the game [here](http://darkatom.github.io/canvanoid), if you don't want to/can't build the code.
 
 ## How to build
-You will need Node.js, Webpack and Babel. 
+You will need Node.js, Webpack, Babel, Babel loader and the Babel module includer (to support the imports and requires). 
 The configurations are already in place. Just create a new npm project, download the needed packages and execute:
 ```
 npm run build
@@ -19,7 +19,7 @@ npm run build
 This will pack the code and transpile it with Babel. A new *dist* folder will appear, and inside a *canvanoid.bundle.js* file.
 
 ## Testing it
-There is an script inside the package.json for that. Just run:
+There is a script inside the package.json for that. Just run:
 ```
 npm run test
 ```
@@ -30,4 +30,5 @@ For packing and launching the tests, I would recommend the following command:
 ```
 webpack & npm run test
 ```
+NOTE: I use a global webpack. You may want to change that command for something more local to the project.
 Please, remember that the Sprites and all graphic methods may -and probably will- make the tests fail, so be sure to comment those lines —specially on the Sprite class, *this.img* instance and related, to avoid commenting all the classes' sprites.
