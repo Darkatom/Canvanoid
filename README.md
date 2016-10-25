@@ -30,5 +30,6 @@ For packing and launching the tests, I would recommend the following command:
 ```
 webpack & npm run test
 ```
-NOTE: I use a global webpack. You may want to change that command for something more local to the project.
+**NOTE**: I use a global webpack. You may want to change that command for something more local to the project.
+
 Please, remember that the Sprites and all graphic methods may -and probably will- make the tests fail, so be sure to comment those lines —specially on the Sprite class, *this.img* instance and related, to avoid commenting all the classes' sprites.
