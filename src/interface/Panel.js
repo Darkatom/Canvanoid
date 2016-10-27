@@ -12,6 +12,10 @@ export default class Panel {
         this.enabled = false;
     }
 
+    getWidth() {
+        return parseInt(this.ctx.measureText(this.msg).width);
+    }
+
     setPosition(x, y) {
         this.initialPosition.x = x;
         this.initialPosition.y = y;
@@ -40,7 +44,7 @@ export default class Panel {
     alignText() {
         if (this.msg == null) return;
         this.ctx.font = this.size + "px " + this.font;
-        var textWidth = parseInt(this.ctx.measureText(this.msg).width);
+        var textWidth = this.getWidth();
 
         switch (this.aligned) {
             case "center":
@@ -62,8 +66,7 @@ export default class Panel {
     }
 
     draw() {
-        if (!this.enabled) return;
-
+        if (!this.enabled || this.msg == null) return;
 		this.ctx.font = this.size + "px " + this.font;
 		this.ctx.fillText(this.msg, this.position.x, this.position.y);
     }

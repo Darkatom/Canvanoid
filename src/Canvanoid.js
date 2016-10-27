@@ -3,9 +3,12 @@ import Board from './logic/Board.js';
 import Brick from './logic/Brick.js';
 import Paddle from './logic/Paddle.js';
 import State from './logic/State.js';
+
 import Sprite from './interface/Sprite.js';
 import Panel from './interface/Panel.js';
 import Score from './interface/Score.js';
+import Control from './interface/Controls.js';
+
 import stages from './assets/stages.js';
 
 export default class Canvanoid {
@@ -51,7 +54,11 @@ export default class Canvanoid {
 		                       	    this.board.position.y + this.board.height + 30,
 							        this.ctx);
 		this.scorePanel.setAlign("right");
-	
+
+		this.controls = new Control(this.board.position.x + 10, 
+									this.board.position.y + this.board.height + 60,
+									this.ctx);
+		this.controls.setEnabled(true);
 		// Game Starting State
 		this.pause = true;
 		this.state.initGame();
@@ -177,6 +184,7 @@ export default class Canvanoid {
 		}
 		
 		this.scorePanel.draw(this.ctx);
+		this.controls.draw();
 	}
 
 	drawLives() {
@@ -193,13 +201,15 @@ export default class Canvanoid {
 		this.scorePanel.setSize("30");
 		this.scorePanel.setAlign("center");
 		this.scorePanel.draw(this.ctx);
-		this.scorePanel.setEnabled(!this.pause);
+		this.scorePanel.setEnabled(false);
 
 		this.messagePanel.setMessage(msg);
 		this.messagePanel.setEnabled(true);
 
 		this.instructionsPanel.setMessage(instr);
 		this.instructionsPanel.setEnabled(true);
+
+		this.controls.setEnabled(false);
 	}
 
 	applyState() {
@@ -218,6 +228,7 @@ export default class Canvanoid {
 
 			this.messagePanel.setEnabled(false);
 			this.instructionsPanel.setEnabled(false);
+		this.controls.setEnabled(true);
 		}
 	}
 }
