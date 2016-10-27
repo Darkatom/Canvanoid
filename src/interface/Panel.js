@@ -39,7 +39,6 @@ export default class Panel {
 
     alignText() {
         if (this.msg == null) return;
-        
         this.ctx.font = this.size + "px " + this.font;
         var textWidth = parseInt(this.ctx.measureText(this.msg).width);
 

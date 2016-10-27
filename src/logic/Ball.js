@@ -22,6 +22,12 @@ export default class Ball {
     }
 
     setDirection(x, y) {
+        var deviation = 0.01;
+        var sign = Math.random() < 0.5 ? -1 : 1;
+
+        if (x == 0) x += deviation*sign;
+        if (y == 0) y += deviation*sign;      
+          
         this.movementVector.x = x;
         this.movementVector.y = y;
     }

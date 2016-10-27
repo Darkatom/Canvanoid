@@ -10,8 +10,8 @@ import stages from './assets/stages.js';
 
 export default class Canvanoid {
 	constructor(canvas) {
-		//this.canvas = canvas;
-		//this.ctx = canvas.getContext("2d");
+		this.canvas = canvas;
+		this.ctx = canvas.getContext("2d");
 		this.time = { now: null,
 					  then: null,
 					  delta: null }
@@ -47,10 +47,10 @@ export default class Canvanoid {
 							         	   this.ctx);
 		this.instructionsPanel.setSize("18");
 
-		this.scorePanel = new Score(this.board.position.x + this.board.width - 100, 
+		this.scorePanel = new Score(this.board.position.x + this.board.width - 10, 
 		                       	    this.board.position.y + this.board.height + 30,
 							        this.ctx);
-		this.scorePanel.setAlign("left");
+		this.scorePanel.setAlign("right");
 	
 		// Game Starting State
 		this.pause = true;
@@ -210,9 +210,9 @@ export default class Canvanoid {
 			this.showMessage(this.state.msg, this.state.instr);
 
 		} else { 
-			this.scorePanel.setPosition(this.board.position.x + this.board.width - 100,
+			this.scorePanel.setPosition(this.board.position.x + this.board.width - 10,
 								   	    this.board.position.y + this.board.height + 30);
-			this.scorePanel.setAlign("left");
+			this.scorePanel.setAlign("right");
 			this.scorePanel.setSize("20");
 			this.scorePanel.setEnabled(true);
 
