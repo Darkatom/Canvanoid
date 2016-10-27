@@ -68,7 +68,7 @@ describe('Board', function() {
         });
         
         it("Ball is repositioned at board's left, and does no longer collide", function() {
-            ball.setPosition(board.position.x - ball.radius, 
+            ball.setPosition(board.position.x, 
                              board.position.y + board.height/2);
             ball.setDirection(-1, 0);
             board.collided("left", ball);
@@ -109,6 +109,7 @@ describe('Board', function() {
                                   50, 20, 1, 1);
             var score = brick.value;
 
+            brick.life = 0;
             game.board.bricks = [brick];
             game.state = new State();
             game.balls = [ new Ball(brick.position.x, brick.position.y) ];
@@ -124,15 +125,13 @@ describe('Board', function() {
                                   50, 20, 1, 1);
             var score = brick.value;
 
+            brick.life = 0;
             game.board.bricks = [brick];
             game.balls = [ new Ball(brick.position.x, brick.position.y) ];
             game.state = new State();
 
             game.board.update(game);
             
-            console.log(score);
-            console.log(game.state.score);
-
             assert.equal(score, game.state.score);
         });
     });

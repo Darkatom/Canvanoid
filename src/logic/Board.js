@@ -94,12 +94,12 @@ export default class Board extends Solid {
 
 			case "left":	
                 ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
-                ball.setPosition(this.position.x + this.width - ball.radius, ball.position.y);
+                ball.setPosition(this.position.x + ball.radius, ball.position.y);
 				break;
 
 			case "right":	
                 ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
-                ball.setPosition(this.position.x + ball.radius, ball.position.y);
+                ball.setPosition(this.position.x + this.width - ball.radius, ball.position.y);
 				break;
 		}
 
