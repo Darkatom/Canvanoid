@@ -5,8 +5,10 @@ import Sprite from "./../interface/Sprite.js";
 export default class Brick extends Solid {
 
     constructor(x, y, w, h, type, stage) {
-        super(x, y, w, h);
-        this.sprite = new Sprite("./sprites/bricks.png", (type-1)*this.width, 0, this.width, this.height);
+        var soundName = type == 9 ? "special" : "brick";
+        super(x, y, w, h, soundName);
+        
+        this.sprite = new Sprite("bricks", (type-1)*this.width, 0, this.width, this.height);
 
         this.life = 1;  // number of hits
         this.value = 50 + (type-1)*10;

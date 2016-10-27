@@ -5,8 +5,8 @@ import Sprite from "./../interface/Sprite.js";
 
 export default class Paddle extends Solid {
     constructor(x, y) {
-        super(x, y, 100, 20);
-        this.sprite = new Sprite("./sprites/Vaus.png", 0, 0, this.width, this.height);
+        super(x, y, 100, 20, "solid");
+        this.sprite = new Sprite("Vaus", 0, 0, this.width, this.height);
 
         this.speed = 500;
         this.movementVector = { x: 0, y:0 };

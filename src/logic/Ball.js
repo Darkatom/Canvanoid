@@ -8,10 +8,14 @@ export default class Ball {
         this.speed = 200;
         this.movementVector = { x: 0, y: -1 };
                         
-        this.sprite = new Sprite("./sprites/ball.png", 0, 0, 16, 16);
+        this.sprite = new Sprite("ball", 0, 0, 16, 16);
+        this.trail = [];
     }
 
     setPosition(x, y) {
+        this.trail.push( {x: this.position.x, y: this.position.y} );
+        if (this.trail.length > 30)
+            this.trail.splice(0, 1);
         this.position.x = x;
         this.position.y = y;
     }
@@ -33,6 +37,17 @@ export default class Ball {
     }
 
     draw (ctx) {
+        for (var point of this.trail) {
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, this.radius, 0, Math.PI*2, false);
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.fill();
+            ctx.stroke();
+        }
+        ctx.strokeStyle = 'rgba(0,0,0,1)';
+        ctx.fillStyle = 'rgba(0,0,0,1)';
+
         if (this.sprite == null){
             //ctx.strokeRect(b.x - b.radius, b.y - b.radius, b.radius*2, b.radius*2);	
             ctx.beginPath();

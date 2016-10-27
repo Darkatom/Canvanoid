@@ -6,12 +6,12 @@ import Sprite from "./../interface/Sprite.js";
 
 export default class Board extends Solid {
 	constructor() {
-		super(0, 0, 650, 600);
+		super(0, 0, 650, 600, "solid");
 
         this.stage = -1;
         this.bricks = null;
 
-        this.sprite = new Sprite("./sprites/congruent_outline.png", 0, 0, 300, 300);
+        this.sprite = new Sprite("congruent_outline", 0, 0, 300, 300);
         this.clear = false; // true when all bricks, except inmortal ones, have been destroyed.
 	}
 
@@ -103,5 +103,6 @@ export default class Board extends Solid {
 				break;
 		}
 
+        this.sound.play();
 	}
 }

@@ -2,11 +2,13 @@ import Ball from "./Ball.js";
 import Sprite from "./../interface/Sprite.js";
 
 export default class Solid {
-	constructor(x, y, w, h) {
+	constructor(x, y, w, h, soundName) {
 		this.position = {x: x, y: y}; 
 		this.width = w;
 		this.height = h; 
 		this.sprite = null;
+
+		this.sound = new Audio("./dist/assets/audio/" + soundName + ".wav");
 	}
 
 	setPosition(x, y) {
@@ -147,6 +149,7 @@ export default class Solid {
 				break;
 		}
 
+		this.sound.play();
 	}
 
 	collision( ball ) {   

@@ -12,9 +12,9 @@ export default class Controls {
         this.font = "Georgia";
         this.enabled = true;
         
-        this.keys = new Sprite("./sprites/control_sprites.png", 0, 0, 100, 50);
-        this.arrows = new Sprite("./sprites/control_sprites.png", 100, 0, 100, 50);
-        this.pause = new Sprite("./sprites/control_sprites.png", 200, 0, 150, 50);
+        this.keys = new Sprite("control_sprites", 0, 0, 100, 50);
+        this.arrows = new Sprite("control_sprites", 100, 0, 100, 50);
+        this.pause = new Sprite("control_sprites", 200, 0, 150, 50);
 
         this.keysPosition = { x: 0, y: 0, scale: 0.5};
         this.arrowsPosition = { x: 0, y: 0, scale: 0.5 };
