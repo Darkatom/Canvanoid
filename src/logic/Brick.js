@@ -5,7 +5,10 @@ import Sprite from "./../interface/Sprite.js";
 export default class Brick extends Solid {
 
     constructor(x, y, w, h, type, stage) {
-        var soundName = type == 9 ? "special" : "brick";
+        var soundName = "brick";        
+        if (type == 9)  soundName = "special";
+        else if (type == 10) soundName = "solid";
+        
         super(x, y, w, h, soundName);
         
         this.sprite = new Sprite("bricks", (type-1)*this.width, 0, this.width, this.height);
@@ -27,8 +30,14 @@ export default class Brick extends Solid {
         }
     }
 
-    collided(dir, ball) {
-        super.collided(dir, ball);
+    draw(ctx) {
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.fillRect(this.position.x + this.width/5, this.position.y + this.width/5, this.width, this.height);
+        super.draw(ctx);        
+    }
+
+    collided(dir, ball, muted) {
+        super.collided(dir, ball, muted);
         if (!this.inmortal)
             this.life--;       
     }

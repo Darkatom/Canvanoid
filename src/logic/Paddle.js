@@ -20,7 +20,7 @@ export default class Paddle extends Solid {
     }
 
     update(game) {
-        super.update(game.balls);
+        super.update(game.balls, game.muted);
         this.move(game.time.delta, game.board);
     }
 

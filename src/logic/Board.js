@@ -26,11 +26,12 @@ export default class Board extends Solid {
             var map = stages[this.stage];
             for (var row = 0; row < map.length; row++) 
                 for (var column = 0; column < map[row].length; column++)
-                    this.bricks.push( new Brick(this.position.x + brickWidth*column, 
-                                                this.position.y + brikHeight*row, 
-                                                brickWidth, brikHeight,
-                                                map[row][column], this.stage) 
-                                    );
+                    if (map[row][column] != 0) {
+                        this.bricks.push( new Brick(this.position.x + brickWidth*column, 
+                                                    this.position.y + brikHeight*row, 
+                                                    brickWidth, brikHeight,
+                                                    map[row][column], this.stage));
+                    }
             
         }
     }
@@ -42,11 +43,11 @@ export default class Board extends Solid {
     }
 
     update( game ) {
-        super.update(game.balls);
+        super.update(game.balls, game.muted);
         
         this.clear = true;
         for (var br of this.bricks) {
-            br.update(game.balls);
+            br.update(game.balls, game.muted);
             this.clear = this.clear && br.inmortal; // if only inmortal bricks remain, the stage is cleared.
             if (br.life <= 0) {
                 this.bricks.splice(this.bricks.indexOf(br), 1);
@@ -78,7 +79,7 @@ export default class Board extends Solid {
         return null;
 	}
 
-	collided( dir, ball ) {
+	collided( dir, ball, muted ) {
 		// Management of the ball after collision
 		
 		switch(dir) {
@@ -103,6 +104,6 @@ export default class Board extends Solid {
 				break;
 		}
 
-        this.sound.play();
+        if (!muted) this.sound.play();
 	}
 }

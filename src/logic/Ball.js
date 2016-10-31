@@ -13,9 +13,9 @@ export default class Ball {
     }
 
     setPosition(x, y) {
-        this.trail.push( {x: this.position.x, y: this.position.y} );
-        if (this.trail.length > 30)
-            this.trail.splice(0, 1);
+        this.trail.unshift( {x: this.position.x, y: this.position.y} );
+        if (this.trail.length > 20) this.trail.splice(this.trail.length - 1, 1);
+    
         this.position.x = x;
         this.position.y = y;
     }
@@ -37,12 +37,13 @@ export default class Ball {
     }
 
     draw (ctx) {
-        for (var point of this.trail) {
+        for (var i = this.trail.length - 1; i >= 0; i--) {
+            var point = this.trail[i];
             ctx.beginPath();
-            ctx.arc(point.x, point.y, this.radius, 0, Math.PI*2, false);
-            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.arc(point.x, point.y, this.radius - 0.5 - i*0.1, 0, Math.PI*2, false);
+            ctx.fillStyle = 'rgba(255,255,255,0.1)';
             ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0)';
             ctx.stroke();
         }
         ctx.strokeStyle = 'rgba(0,0,0,1)';

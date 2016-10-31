@@ -28,6 +28,8 @@ export default class Canvanoid {
 		this.balls = null;
 		this.vaus = null; 
 		this.pause = null;
+
+		this.muted = false;
 	}
 	
 	start() {	
@@ -91,6 +93,12 @@ export default class Canvanoid {
                 this.vaus.setDirection(-1, 0);
             } else if (e.key == "d" || e.key == "D" || e.keyCode == 39) { // right key
                 this.vaus.setDirection(1, 0);
+            
+		   } else if (e.key == "m") { // sound muting
+                this.muted = !this.muted;
+
+            } else if (e.key == "p") { // debug key
+                this.state.nextStage();
             }
 		};     
 
@@ -177,6 +185,7 @@ export default class Canvanoid {
 			this.vaus.draw(this.ctx);
 
 			this.drawLives();
+			this.ctx.strokeRect(0, 0, this.canvas.width, 650);
 		} else {
 			if (this.state.msg != null) this.messagePanel.draw(this.ctx);
 			if (this.state.instr != null) this.instructionsPanel.draw(this.ctx);
@@ -184,7 +193,7 @@ export default class Canvanoid {
 		}
 		
 		this.scorePanel.draw(this.ctx);
-		this.controls.draw();
+		this.controls.draw(this.muted);
 	}
 
 	drawLives() {

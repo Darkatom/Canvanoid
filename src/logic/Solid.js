@@ -23,15 +23,15 @@ export default class Solid {
 			this.sprite.render(ctx, this.position.x, this.position.y, this.width, this.height);
 	}
 
-	update(balls) {
+	update(balls, muted) {
 		for (var b of balls) {  // look for collisions
 			var dir = this.collision(b);
 			if (dir != null)
-				this.collided(dir, b);
+				this.collided(dir, b, muted);
 		}
 	}
 
-	collided( dir, ball ) {
+	collided( dir, ball, muted ) {
 		// Management of the ball after collision
 		
 		switch(dir) {
@@ -148,8 +148,8 @@ export default class Solid {
 				ball.setPosition(this.position.x + this.width + ball.radius, ball.position.y);   // put ball right from solid
 				break;
 		}
-
-		this.sound.play();
+		
+		if (!muted) this.sound.play();
 	}
 
 	collision( ball ) {   
