@@ -1,12 +1,15 @@
-import stages from './stages.js';
-import Sprite from './classes/Sprite.js';
-import Ball from './classes/Ball.js';
-import Board from './classes/Board.js';
-import Brick from './classes/Brick.js';
-import Vaus from './classes/Vaus.js';
-import State from './classes/State.js';
-import Panel from './classes/Panel.js';
-import Score from './classes/Score.js';
+import Ball from './logic/Ball.js';
+import Board from './logic/Board.js';
+import Brick from './logic/Brick.js';
+import Paddle from './logic/Paddle.js';
+import State from './logic/State.js';
+
+import Sprite from './interface/Sprite.js';
+import Panel from './interface/Panel.js';
+import Score from './interface/Score.js';
+import Control from './interface/Controls.js';
+
+import stages from './assets/stages.js';
 
 export default class Canvanoid {
 	constructor(canvas) {
@@ -17,39 +20,105 @@ export default class Canvanoid {
 					  delta: null }
 
 	    this.messagePanel = null;
-		this.score = null;
+		this.instructionsPanel = null;
+		this.scorePanel = null;
 
 		this.state = null; 
 		this.board = null;
 		this.balls = null;
 		this.vaus = null; 
+		this.pause = null;
+
+		this.muted = false;
 	}
 	
 	start() {	
+		// Game Elements
 		this.state = new State();
-		
 		this.board = new Board();
 		this.board.setStage(this.state.stage);
 
-		this.balls = [ new Ball(this.board.x + this.board.w/2, this.board.y + this.board.h/2 + 100) ];
-		this.vaus = new Vaus(this.board.x + this.board.w/2 - 50, 
-              				 this.board.y + this.board.h - 50);
-		this.vaus.start();
+		this.balls = [ new Ball(this.board.position.x + this.board.width/2, this.board.position.y + this.board.height/2 + 100) ];
+		this.vaus = new Paddle(this.board.position.x + this.board.width/2 - 50, 
+              				   this.board.position.y + this.board.height - 50);
+		this.interruptions();
 
-		this.score = new Score(this.board.x + this.board.w - 100, 
-		                       this.board.y + this.board.h + 30);
+		// Interface Elements
+		this.messagePanel = new Panel(this.board.position.x + this.board.width/2, 
+							          this.board.position.y + this.board.height/2,
+							   		  this.ctx);
 		
-		this.messagePanel = new Panel( this.board.x + this.board.w/2 - 150, 
-							           this.board.y + this.board.h/2 - 100);
+		this.instructionsPanel = new Panel(this.messagePanel.initialPosition.x, this.messagePanel.initialPosition.y + 50,
+							         	   this.ctx);
+		this.instructionsPanel.setSize("18");
+
+		this.scorePanel = new Score(this.board.position.x + this.board.width - 10, 
+		                       	    this.board.position.y + this.board.height + 30,
+							        this.ctx);
+		this.scorePanel.setAlign("right");
+
+		this.controls = new Control(this.board.position.x + 10, 
+									this.board.position.y + this.board.height + 60,
+									this.ctx);
+		this.controls.setEnabled(true);
+		// Game Starting State
+		this.pause = true;
+		this.state.initGame();
+		this.applyState();
 
 		this.time.then = Date.now();
 		this.loop();
 	}
-
+ 
 	reset() {
-		this.balls = [ new Ball(this.board.x + this.board.w/2, this.board.y + this.board.h/2 + 100) ];
-		this.vaus.x = this.board.x + this.board.w/2 - 50; 
-        this.vaus.y = this.board.y + this.board.h - 50;
+		this.balls = [ new Ball(this.board.position.x + this.board.width/2, 
+							    this.board.position.y + this.board.height/2 + 100) 
+					 ];
+		this.vaus.setPosition(this.board.position.x + this.board.width/2 - 50,
+							  this.board.position.y + this.board.height - 50);
+	}
+
+	interruptions() {
+		window.onkeydown = (e)=>{
+			if (e.keyCode == 32){
+				if (this.state.lives <= 0 || this.state.stage >= stages.length)
+					this.start();
+				else {
+					this.pause = !this.pause;
+					this.state.pauseGame(this.pause);
+					this.applyState();
+				}
+
+			} else if (e.key == "a" || e.key == "A" || e.keyCode == 37) { // left key
+                this.vaus.setDirection(-1, 0);
+            } else if (e.key == "d" || e.key == "D" || e.keyCode == 39) { // right key
+                this.vaus.setDirection(1, 0);
+            
+		   } else if (e.key == "m") { // sound muting
+                this.muted = !this.muted;
+
+            } else if (e.key == "p") { // debug key
+                this.state.nextStage();
+            }
+		};     
+
+        window.onkeyup = (e)=>{
+            this.vaus.setDirection(0, 0);
+		};
+
+        window.onmousedown = (e)=> {
+            this.vaus.click = true;
+        };
+
+        // Mouse Input
+        window.onmousemove = (e)=> {
+            if (this.vaus.click)
+                this.vaus.setPosition(e.offsetX - this.vaus.width/2, this.vaus.position.y);
+        };
+        
+        window.onmouseup = (e)=>{
+            this.vaus.click = false;
+		};
 	}
 
 	loop() {	
@@ -65,19 +134,29 @@ export default class Canvanoid {
 	}
 
 	update(dt) {
-		if (this.state.lives <= 0)	return;
+		if (this.state.lives <= 0) return;
+		
+		if (this.pause) return;
 
+		this.updateBalls(dt);
+		this.board.update(this);
+		this.vaus.update(this);	
+
+		this.updateState();
+		this.applyState();
+	}
+
+	updateBalls(dt) {
 		for (var b of this.balls) {
 			b.update(dt);
-			if (b.y >= this.vaus.y + this.vaus.h) {
+			if (b.position.y >= this.vaus.position.y + this.vaus.height) {
 				this.balls.splice(this.balls.indexOf(b), 1);
 				b = null;
 			}
 		}
+	}
 
-		this.board.update(this);
-		this.vaus.update(this);
-
+	updateState() {		
 		if (this.board.clear) {
 			this.reset();
 			this.state.nextStage();
@@ -88,20 +167,16 @@ export default class Canvanoid {
 		} 
 
 		if (this.state.lives > 0) {
-			if (this.state.stage >= stages.length) {
+			if (this.state.stage >= stages.length)
 				this.state.wonGame();
-			}
 		} else {
 			this.state.endGame();
 		}
-		
-		this.applyState();
 	}
 
 	draw() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		
-		if (this.state.msg == null) {
+		if (this.state.msg == null && this.state.instr == null) {
 			this.board.draw(this.ctx);
 
 			for (var b of this.balls) 
@@ -110,42 +185,59 @@ export default class Canvanoid {
 			this.vaus.draw(this.ctx);
 
 			this.drawLives();
+			this.ctx.strokeRect(0, 0, this.canvas.width, 650);
 		} else {
-			this.messagePanel.draw(this.ctx);
+			if (this.state.msg != null) this.messagePanel.draw(this.ctx);
+			if (this.state.instr != null) this.instructionsPanel.draw(this.ctx);
+			this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
 		}
 		
-		this.score.draw(this.ctx);
-		this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
+		this.scorePanel.draw(this.ctx);
+		this.controls.draw(this.muted);
 	}
 
 	drawLives() {
 		for (var i = 0; i < this.state.lives; i++) {
 			this.vaus.sprite.render(this.ctx,
-									this.board.x + 10 + i*this.vaus.sprite.w/3 + i*5, 
-									this.board.y + this.board.h + 10 + this.vaus.sprite.h/2, 
-									this.vaus.sprite.w/3, this.vaus.sprite.h/2);
+									this.board.position.x + 10 + i*this.vaus.width/3 + i*5, 
+									this.board.position.y + this.board.height + 10 + this.vaus.height/2, 
+									this.vaus.width/3, this.vaus.height/2);
 		}
 	}
 
-	showMessage(msg) {
-		this.score.x = this.board.x + this.board.w/2 - 70;
-		this.score.y = this.board.y + this.board.h/2 - 50;
-		this.size = "30";
-		this.score.draw(this.ctx);
+	showMessage(msg, instr) {
+		this.scorePanel.setPosition(this.instructionsPanel.initialPosition.x, this.instructionsPanel.initialPosition.y + 50);
+		this.scorePanel.setSize("30");
+		this.scorePanel.setAlign("center");
+		this.scorePanel.draw(this.ctx);
+		this.scorePanel.setEnabled(false);
+
 		this.messagePanel.setMessage(msg);
 		this.messagePanel.setEnabled(true);
+
+		this.instructionsPanel.setMessage(instr);
+		this.instructionsPanel.setEnabled(true);
+
+		this.controls.setEnabled(false);
 	}
 
 	applyState() {
 		this.board.setStage(this.state.stage);
-		this.score.value = this.state.score;
+		this.scorePanel.value = this.state.score;
 
 		if (this.state.msg != null) {
-			this.showMessage(this.state.msg);
+			this.showMessage(this.state.msg, this.state.instr);
+
 		} else { 
+			this.scorePanel.setPosition(this.board.position.x + this.board.width - 10,
+								   	    this.board.position.y + this.board.height + 30);
+			this.scorePanel.setAlign("right");
+			this.scorePanel.setSize("20");
+			this.scorePanel.setEnabled(true);
+
 			this.messagePanel.setEnabled(false);
-			this.score.x = this.board.x + this.board.w - 100; 
-			this.score.y = this.board.y + this.board.h + 30;
+			this.instructionsPanel.setEnabled(false);
+		this.controls.setEnabled(true);
 		}
 	}
 }
