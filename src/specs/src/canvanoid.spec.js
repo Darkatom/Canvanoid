@@ -5,6 +5,7 @@ import Paddle from "./../../logic/Paddle.js";
 import State from "./../../logic/State.js";
 import stages from './../../assets/stages.js';
 
+var expect = require('chai').expect;
 var assert = require('assert');
 
 console.log("- Testing Canvanoid Functions -");
@@ -21,8 +22,9 @@ describe('Canvanoid', function() {
             game.balls = [];
             game.balls.push(balls[1]);
             game.updateBalls(0);
-
-            assert.equal(-1, game.balls.indexOf(balls[1]));
+            
+            //assert.equal(-1, game.balls.indexOf(balls[1]));
+            expect(game.balls.indexOf(balls[1])).to.equal(-1);
         });
 
         it('Balls over the paddle are NOT deleted', function() {
@@ -30,7 +32,8 @@ describe('Canvanoid', function() {
             game.balls.push(balls[0]);
             game.updateBalls(0);
 
-            assert.equal(0, game.balls.indexOf(balls[0]));
+            //assert.equal(0, game.balls.indexOf(balls[0]));
+            expect(game.balls.indexOf(balls[0])).to.equal(0);
         });
     });
     
@@ -50,7 +53,8 @@ describe('Canvanoid', function() {
 
             game.updateState();
 
-            assert.equal(currentStage + 1, game.state.stage);
+            //assert.equal(currentStage + 1, game.state.stage);
+            expect(game.state.stage).to.equal(currentStage + 1);
         });
 
         it('Stage reseted when all balls are lost and a life is lost (but there are still lives left)', function() {
@@ -61,7 +65,8 @@ describe('Canvanoid', function() {
 
             game.updateState();
 
-            assert.equal(currentLives - 1, game.state.lives);
+            //assert.equal(currentLives - 1, game.state.lives);
+            expect(game.state.lives).to.equal(currentLives - 1);
         });
 
         it('Game over (all balls lost & no lives left)', function() {
@@ -74,7 +79,8 @@ describe('Canvanoid', function() {
 
             game.updateState();
             
-            assert.equal(stateMSG, game.state.msg); 
+            //assert.equal(stateMSG, game.state.msg); 
+            expect(game.state.msg).to.equal(stateMSG);
         });
 
         it('Game won (last stage reached & at least one life left)', function() {
@@ -88,7 +94,8 @@ describe('Canvanoid', function() {
 
             game.updateState();
             
-            assert.equal(stateMSG, game.state.msg); 
+            //assert.equal(stateMSG, game.state.msg); 
+            expect(game.state.msg).to.equal(stateMSG);
         });
     });
 });

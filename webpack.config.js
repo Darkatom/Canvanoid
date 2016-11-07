@@ -2,8 +2,8 @@ var glob = require("glob");
 
 module.exports = {
     entry: { 
-        canvanoid: './src/main.js',
-        'canvanoid.specs': glob.sync('./src/specs/src/*.spec.js')
+        canvanoid: ['babel-polyfill', './src/main.js'],
+        'canvanoid.specs': ['babel-polyfill'].concat(glob.sync('./src/specs/src/*.spec.js'))
     },
     output: {
         library: 'Canvanoid',

@@ -4,6 +4,8 @@ import Ball from "./../../logic/Ball.js";
 import Brick from "./../../logic/Brick.js";
 import State from "./../../logic/State.js";
 
+var expect = require('chai').expect;
+var should = require('chai').should();
 var assert = require('assert');
 
 console.log("- Testing Board Functions -");
@@ -16,34 +18,39 @@ describe('Board', function() {
             ball.setPosition(board.position.x + board.width/2, 
                              board.position.y - ball.radius);
             ball.setDirection(0, -1);
-            assert.equal("top", board.collision(ball));
+            //assert.equal("top", board.collision(ball));
+            board.collision(ball).should.equal("top");
         });
 
         it('Ball collides the bottom', function() {
             ball.setPosition(board.position.x + board.width/2, 
                              board.position.y + board.height + ball.radius);
             ball.setDirection(0, 1);
-            assert.equal("bottom", board.collision(ball));
+            //assert.equal("bottom", board.collision(ball));
+            board.collision(ball).should.equal("bottom");
         });
             
         it('Ball collides the left', function() {
             ball.setPosition(board.position.x - ball.radius, 
                              board.position.y + board.height/2);
             ball.setDirection(-1, 0);
-            assert.equal("left", board.collision(ball));
+            //assert.equal("left", board.collision(ball));
+            board.collision(ball).should.equal("left");
         });
             
         it('Ball collides the right', function() {
             ball.setPosition(board.position.x + board.width + ball.radius, 
                              board.position.y + board.height/2);
             ball.setDirection(1, 0);
-            assert.equal("right", board.collision(ball));
+            //assert.equal("right", board.collision(ball));
+            board.collision(ball).should.equal("right");
         });
             
         it('Ball does not collide', function() {
             ball.setPosition(board.position.x + board.width/2, 
                              board.position.y + board.height/2);
-            assert.equal(null, board.collision(ball));
+            //assert.equal(null, board.collision(ball));
+            should.not.exist(board.collision(ball));
         });
     });
 
@@ -56,7 +63,8 @@ describe('Board', function() {
                              board.position.y - ball.radius);
             ball.setDirection(0, -1);
             board.collided("top", ball);
-            assert.equal(null, board.collision(ball));
+            //assert.equal(null, board.collision(ball));
+            should.not.exist(board.collision(ball));
         });
         
         it("Ball is repositioned at board's bottom, and does no longer collide", function() {
@@ -64,7 +72,8 @@ describe('Board', function() {
                              board.position.y + board.height + ball.radius);
             ball.setDirection(0, 1);
             board.collided("bottom", ball);
-            assert.equal(null, board.collision(ball));
+            //assert.equal(null, board.collision(ball));
+            should.not.exist(board.collision(ball));
         });
         
         it("Ball is repositioned at board's left, and does no longer collide", function() {
@@ -72,7 +81,8 @@ describe('Board', function() {
                              board.position.y + board.height/2);
             ball.setDirection(-1, 0);
             board.collided("left", ball);
-            assert.equal(null, board.collision(ball));
+            //assert.equal(null, board.collision(ball));
+            should.not.exist(board.collision(ball));
         });
         
         it("Ball is repositioned at board's right, and does no longer collide", function() {
@@ -80,7 +90,8 @@ describe('Board', function() {
                              board.position.y + board.height/2);
             ball.setDirection(1, 0);
             board.collided("right", ball);
-            assert.equal(null, board.collision(ball));
+            //assert.equal(null, board.collision(ball));
+            should.not.exist(board.collision(ball));
         });
     });
     
@@ -92,7 +103,8 @@ describe('Board', function() {
         it('Board is clear with no bricks', function() {
             game.board.bricks = [];
             game.board.update(game);
-            assert.equal(true, game.board.clear);
+            //assert.equal(true, game.board.clear);
+            expect(game.board.clear).to.equal(true);
         });
 
         it('Board is not clear if there are bricks', function() {
@@ -100,7 +112,8 @@ describe('Board', function() {
             game.board.setStage(0);
             game.board.update(game);
 
-            assert.equal(false, game.board.clear);
+            //assert.equal(false, game.board.clear);
+            expect(game.board.clear).to.equal(false);
         });
 
         it('Brick is deleted if it has no life left', function() {
@@ -116,7 +129,8 @@ describe('Board', function() {
 
             game.board.update(game);
 
-            assert.equal(-1, game.board.bricks.indexOf(brick));
+            //assert.equal(-1, game.board.bricks.indexOf(brick));
+            expect(game.board.bricks.indexOf(brick)).to.equal(-1);
         });
 
         it('If brick is deleted, its value is added to score', function() {
@@ -132,7 +146,8 @@ describe('Board', function() {
 
             game.board.update(game);
             
-            assert.equal(score, game.state.score);
+            //assert.equal(score, game.state.score);
+            expect(game.state.score).to.equal(score);
         });
     });
 });
