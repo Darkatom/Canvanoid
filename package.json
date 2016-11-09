@@ -33,9 +33,11 @@
     "karma-mocha": "^1.2.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-requirejs": "^1.1.0",
+    "karma-sinon": "^1.0.5",
     "mocha": "^3.1.2",
     "npm-watch": "^0.1.6",
     "requirejs": "^2.3.2",
+    "sinon": "^1.17.6",
     "webpack": "^1.13.3"
   }
 }

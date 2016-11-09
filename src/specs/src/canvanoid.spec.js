@@ -8,15 +8,34 @@ import stages from './../../assets/stages.js';
 var expect = require('chai').expect;
 var assert = require('assert');
 
+
+
 console.log("- Testing Canvanoid Functions -");
 describe('Canvanoid', function() {
     describe('#-> Ball handling', function() {
-        var game = new Canvanoid();
-        game.vaus = new Paddle(150, 150);
-        var balls = [new Ball(game.vaus.position.x + game.vaus.width/2, // Over the paddle
+        
+        var canvas = null;
+        var canvasMock = null; 
+        var game = null;
+        var balls = null;
+
+        beforeEach(function() {
+            //canvas = {getContext: function(){}};
+            //canvasMock = sinon.mock(canvas);
+            //canvasMock.expects("getContext").once().throws();
+            game = new Canvanoid(document.createElement("canvas"));
+            game.vaus = new Paddle(150, 150);
+
+            balls = [new Ball(game.vaus.position.x + game.vaus.width/2,     // Over the paddle
                               game.vaus.position.y - game.vaus.height),
                      new Ball(game.vaus.position.x + game.vaus.width/2,     // Beneath the paddle
-                              game.vaus.position.y + game.vaus.height*2)];
+                              game.vaus.position.y + game.vaus.height*2)];            
+        });
+
+        afterEach(function() {
+            // canvasMock.verify();
+        });
+        
 
         it('Balls beneath the paddle are deleted', function() {
             game.balls = [];
@@ -38,12 +57,26 @@ describe('Canvanoid', function() {
     });
     
     describe('#-> State handling', function() {
-        var game = new Canvanoid();
-        game.board = new Board();
-        game.vaus = new Paddle(0,0);
-        game.state = new State();
-        game.state.initGame();
- 
+        var canvas = null;
+        var canvasMock = null; 
+        var game = null;
+        var balls = null;
+
+        beforeEach(function() {
+            // canvas = {getContext: function(){}};
+            // canvasMock = sinon.mock(canvas);
+            // canvasMock.expects("getContext").once().throws();
+            game = new Canvanoid(document.createElement("canvas"));
+            game.board = new Board();
+            game.vaus = new Paddle(0,0);
+            game.state = new State();
+            game.state.initGame();
+        });
+
+        afterEach(function() {
+            // canvasMock.verify();
+        });
+
 
         it('Next stage when board is clear', function() {
 

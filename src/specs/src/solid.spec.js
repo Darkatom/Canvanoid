@@ -9,7 +9,7 @@ describe('Solid', function() {
   describe('#-> Collision detection.', function() {
     var solid = new Solid(100, 100, 50, 50);
     var ball = new Ball(0, 0);
-    
+
     it('Ball does not collide', function() {
       ball.setPosition(0, 0);
       ball.setLastPosition(0, 0);

@@ -10,8 +10,8 @@ import stages from './assets/stages.js';
 
 export default class Canvanoid {
 	constructor(canvas) {
-		//this.canvas = canvas;
-		//this.ctx = canvas.getContext("2d");
+		this.canvas = canvas;
+		this.ctx = canvas.getContext("2d");
 		this.time = { now: null,
 					  then: null,
 					  delta: null }

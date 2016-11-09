@@ -8,6 +8,7 @@ var expect = require('chai').expect;
 var should = require('chai').should();
 var assert = require('assert');
 
+
 console.log("- Testing Board Functions -");
 describe('Board', function() {
     describe('#-> Collision detection.', function() {
@@ -96,9 +97,23 @@ describe('Board', function() {
     });
     
     describe('#-> Brick handling.', function() {
-        var game = new Canvanoid();
-        game.board = new Board(); 
-        game.balls = [ new Ball(0, 0)];
+        var canvas = null;
+        var canvasMock = null; 
+        var game = null;
+        var balls = null;
+
+        beforeEach(function() {
+            // canvas = {getContext: function(){}};
+            // canvasMock = sinon.mock(canvas);
+            // canvasMock.expects("getContext").once().throws();
+            game = new Canvanoid(document.createElement("canvas"));
+            game.board = new Board(); 
+            game.balls = [ new Ball(0, 0)];
+        });
+
+        afterEach(function() {
+            // canvasMock.verify();
+        });
 
         it('Board is clear with no bricks', function() {
             game.board.bricks = [];
