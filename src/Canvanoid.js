@@ -8,15 +8,21 @@ import Panel from './interface/Panel.js';
 import Score from './interface/Score.js';
 import stages from './assets/stages.js';
 
+
+const _SMALL_FONT_SIZE = "18";
+const _BIG_FONT_SIZE = "20";
+const _LARGE_FONT_SIZE = "30";
+
+
 export default class Canvanoid {
 	constructor(canvas) {
 		this.canvas = canvas;
 		this.ctx = canvas.getContext("2d");
 		this.time = { now: null,
-					  then: null,
-					  delta: null }
+					        then: null,
+					        delta: null }
 
-	    this.messagePanel = null;
+    this.messagePanel = null;
 		this.instructionsPanel = null;
 		this.scorePanel = null;
 
@@ -33,26 +39,19 @@ export default class Canvanoid {
 		this.board = new Board();
 		this.board.setStage(this.state.stage);
 
-		this.balls = [ new Ball(this.board.position.x + this.board.width/2, this.board.position.y + this.board.height/2 + 100) ];
-		this.vaus = new Paddle(this.board.position.x + this.board.width/2 - 50, 
-              				   this.board.position.y + this.board.height - 50);
-		this.interruptions();
+		this.balls = [];
+		this.vaus = new Paddle();
 
 		// Interface Elements
-		this.messagePanel = new Panel(this.board.position.x + this.board.width/2, 
-							          this.board.position.y + this.board.height/2,
-							   		  this.ctx);
-		
-		this.instructionsPanel = new Panel(this.messagePanel.initialPosition.x, this.messagePanel.initialPosition.y + 50,
-							         	   this.ctx);
-		this.instructionsPanel.setSize("18");
-
-		this.scorePanel = new Score(this.board.position.x + this.board.width - 100, 
-		                       	    this.board.position.y + this.board.height + 30,
-							        this.ctx);
-		this.scorePanel.setAlign("left");
+		this.messagePanel = new Panel(0, 0, this.ctx);
+		this.instructionsPanel = new Panel(0, 0, this.ctx);
+		this.scorePanel = new Score(0, 0, this.ctx);
 	
-		// Game Starting State
+		// Game Starting State		
+		this.setGameObjects_StartPositions();
+		this.setPanels_StartPositions();
+		this.setupEvents();
+
 		this.pause = true;
 		this.state.initGame();
 		this.applyState();
@@ -61,15 +60,31 @@ export default class Canvanoid {
 		this.loop();
 	}
  
-	reset() {
+	setGameObjects_StartPositions() {
 		this.balls = [ new Ball(this.board.position.x + this.board.width/2, 
-							    this.board.position.y + this.board.height/2 + 100) 
-					 ];
+							              this.board.position.y + this.board.height/2 + 100)];
+
 		this.vaus.setPosition(this.board.position.x + this.board.width/2 - 50,
-							  this.board.position.y + this.board.height - 50);
+							            this.board.position.y + this.board.height - 50);
 	}
 
-	interruptions() {
+	setPanels_StartPositions() {
+		this.messagePanel.setPosition(this.board.position.x + this.board.width/2, this.board.position.y + this.board.height/2);
+		
+		this.instructionsPanel.setPosition(this.messagePanel.initialPosition.x, this.messagePanel.initialPosition.y + 50);
+		this.instructionsPanel.setSize(_SMALL_FONT_SIZE);
+
+		this.scorePanel.setPosition(this.board.position.x + this.board.width - 100, this.board.position.y + this.board.height + 30);
+		this.scorePanel.setAlign("left");
+		this.scorePanel.setSize(_BIG_FONT_SIZE);
+	}
+
+	setupEvents() {
+		setupKeyboardEvents();
+		setupMouseEvents();
+	}
+
+	setupKeyboardEvents() {
 		window.onkeydown = (e)=>{
 			if (e.keyCode == 32){
 				if (this.state.lives <= 0 || this.state.stage >= stages.length)
@@ -81,29 +96,30 @@ export default class Canvanoid {
 				}
 
 			} else if (e.key == "a" || e.key == "A" || e.keyCode == 37) { // left key
-                this.vaus.setDirection(-1, 0);
-            } else if (e.key == "d" || e.key == "D" || e.keyCode == 39) { // right key
-                this.vaus.setDirection(1, 0);
-            }
+        this.vaus.setDirection(-1, 0);
+      } else if (e.key == "d" || e.key == "D" || e.keyCode == 39) { // right key
+        this.vaus.setDirection(1, 0);
+      }
 		};     
 
-        window.onkeyup = (e)=>{
-            this.vaus.setDirection(0, 0);
-		};
+    window.onkeyup = (e)=>{
+      this.vaus.setDirection(0, 0);
+    };
 
-        window.onmousedown = (e)=> {
-            this.vaus.click = true;
-        };
+    window.onmousedown = (e)=> {
+      this.vaus.click = true;
+    };
+	}
 
-        // Mouse Input
-        window.onmousemove = (e)=> {
-            if (this.vaus.click)
-                this.vaus.setPosition(e.offsetX - this.vaus.width/2, this.vaus.position.y);
-        };
-        
-        window.onmouseup = (e)=>{
-            this.vaus.click = false;
-		};
+	setupMouseEvents() {
+    window.onmousemove = (e)=> {
+      if (this.vaus.click)
+        this.vaus.setPosition(e.offsetX - this.vaus.width/2, this.vaus.position.y);
+    };
+
+    window.onmouseup = (e)=>{
+      this.vaus.click = false;
+    };
 	}
 
 	loop() {	
@@ -143,11 +159,11 @@ export default class Canvanoid {
 
 	updateState() {		
 		if (this.board.clear) {
-			this.reset();
+			this.setGameObjects_StartPositions();
 			this.state.nextStage();
 
 		} else if (this.balls.length <= 0) {
-			this.reset();
+			this.setGameObjects_StartPositions();
 			this.state.resetStage();
 		} 
 
@@ -190,7 +206,7 @@ export default class Canvanoid {
 
 	showMessage(msg, instr) {
 		this.scorePanel.setPosition(this.instructionsPanel.initialPosition.x, this.instructionsPanel.initialPosition.y + 50);
-		this.scorePanel.setSize("30");
+		this.scorePanel.setSize(_LARGE_FONT_SIZE);
 		this.scorePanel.setAlign("center");
 		this.scorePanel.draw(this.ctx);
 		this.scorePanel.setEnabled(!this.pause);
@@ -210,10 +226,9 @@ export default class Canvanoid {
 			this.showMessage(this.state.msg, this.state.instr);
 
 		} else { 
-			this.scorePanel.setPosition(this.board.position.x + this.board.width - 100,
-								   	    this.board.position.y + this.board.height + 30);
+			this.scorePanel.setPosition(this.board.position.x + this.board.width - 100, this.board.position.y + this.board.height + 30);
 			this.scorePanel.setAlign("left");
-			this.scorePanel.setSize("20");
+			this.scorePanel.setSize(_BIG_FONT_SIZE);
 			this.scorePanel.setEnabled(true);
 
 			this.messagePanel.setEnabled(false);

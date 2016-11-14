@@ -1,7 +1,7 @@
 import Canvanoid from './Canvanoid.js';
 
 window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || 
-						       window.msRequestAnimationFrame || window.mozRequestAnimationFrame;
+						                   window.msRequestAnimationFrame || window.mozRequestAnimationFrame;
 					
 var canvas = document.getElementById('canvas');
 canvas.width = window.innerWidth - 100;
