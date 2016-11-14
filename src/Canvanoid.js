@@ -80,27 +80,26 @@ export default class Canvanoid {
 	}
 
 	setupEvents() {
-		setupKeyboardEvents();
-		setupMouseEvents();
+		this.setupKeyboardEvents();
+		this.setupMouseEvents();
 	}
 
 	setupKeyboardEvents() {
-		window.onkeydown = (e)=>{
-			if (e.keyCode == 32){
-				if (this.state.lives <= 0 || this.state.stage >= stages.length)
-					this.start();
-				else {
-					this.pause = !this.pause;
-					this.state.pauseGame(this.pause);
-					this.applyState();
-				}
-
-			} else if (e.key == "a" || e.key == "A" || e.keyCode == 37) { // left key
+  	window.onkeydown = (e)=>{
+      if (e.keyCode == 32){
+        if (this.state.lives <= 0 || this.state.stage >= stages.length)
+          this.start();
+        else {
+          this.pause = !this.pause;
+          this.state.pauseGame(this.pause);
+          this.applyState();
+        }
+      } else if (e.key == "a" || e.key == "A" || e.keyCode == 37) { // left key
         this.vaus.setDirection(-1, 0);
       } else if (e.key == "d" || e.key == "D" || e.keyCode == 39) { // right key
         this.vaus.setDirection(1, 0);
       }
-		};     
+    };     
 
     window.onkeyup = (e)=>{
       this.vaus.setDirection(0, 0);
