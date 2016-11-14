@@ -77,13 +77,11 @@ export default class Solid {
         angle = 25;	 // degrees			
 
       } else { // The ball hit a side (between the center and the edges)
-
         if (ball.position.x > this.position.x + this.width/2 ) // right side
           angle = 45; // degrees	
         else	// left side
           angle = 135; // degrees	
         }
-
         angle = angle*Math.PI/180; // radians
         dirX = Math.cos(angle);	
         dirY = Math.sin(angle);
@@ -93,7 +91,7 @@ export default class Solid {
       break;
 
     case "left":	
-      if 	(ball.position.y + ball.radius > this.position.y + ball.radius && 
+      if (ball.position.y + ball.radius > this.position.y + ball.radius && 
         ball.position.y - ball.radius < this.position.y + this.height - ball.radius ) {
         ball.setDirection(-ball.movementVector.x, ball.movementVector.y);   // change movement horizontally
 
